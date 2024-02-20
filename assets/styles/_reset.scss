@@ -1,0 +1,53 @@
+@import "variables";
+* {
+  margin: 0;
+  padding: 0;
+  font-family: $font;
+}
+
+body {
+  font-family: $font;
+  color: $text-colorRank;
+  font-weight: 400;
+}
+p {
+  font-size: 15px;
+}
+span {
+  font-family: $font;
+  color: $text-colorRank;
+}
+
+a {
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    outline: none;
+  }
+}
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+ul,
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+
+select,option {
+  cursor: pointer;
+}
+input,
+button,
+select {
+  outline: none;
+  border: none;
+}
+button {
+  cursor: pointer;
+}
