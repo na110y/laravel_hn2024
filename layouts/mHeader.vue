@@ -11,7 +11,17 @@
               </li>
             </ul>
             <ul class="menu-icon">
-              <li></li>
+              <li>
+                <img src="@/assets/img/mes.svg" alt="error-icon">
+              </li>
+              <li>
+                <div class="menu-info_icon">
+                  <img src="@/assets/img/mes.svg" alt="error-icon">
+                </div>
+                <div class="menu-info">
+                  <div class="menu-info_name">Đức Thịnh</div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -64,7 +74,7 @@ export default {
   height: 80px;
   display: flex;
   align-items: center;
-  gap: 0 40px;
+  gap: 0 80px;
   margin: auto;
   &-item {
     display: flex;
