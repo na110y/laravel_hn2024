@@ -2,22 +2,31 @@
     <b-container fluid>
       <div class="menuNav">
           <div class="menu">
-            <div class="menu-title"> BAE SHOP</div>
+            <div class="menu-title"> 
+              <img src="@/assets/img/logo.png" alt="error-icon">
+            </div>
             <ul class="menu-item">
               <li v-for="(item, index) in menuNav" :key="index">
-                <nuxt-link :to="item.href">
-                  <div> {{ item.title }} </div>
-                </nuxt-link>
+                <div class="menu-link">
+                  <nuxt-link :to="item.href">
+                    <div> {{ item.title }} </div>
+                  </nuxt-link>
+                </div>
               </li>
             </ul>
             <ul class="menu-icon">
               <li>
-                <img src="@/assets/img/mes.svg" alt="error-icon">
+                <div class="menu-icon_mess">
+                  <img src="@/assets/img/mess.svg" alt="error-icon" id="icon">
+                </div>
               </li>
               <li>
-                <div class="menu-info_icon">
-                  <img src="@/assets/img/mes.svg" alt="error-icon">
+                <div class="menu-icon_notif">
+                  <img src="@/assets/img/notif.svg" alt="error-icon" id="icon">
                 </div>
+              </li>
+              <li class="menu-icon_info">
+                <div class="menu-webcome">Xin chào,</div>
                 <div class="menu-info">
                   <div class="menu-info_name">Đức Thịnh</div>
                 </div>
@@ -57,7 +66,8 @@ export default {
     },
     btnShowLever() {
       this.isOpenLever = !this.isOpenLever;
-    }
+    },
+
   },
 };
 </script>
@@ -74,12 +84,74 @@ export default {
   height: 80px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 0 80px;
   margin: auto;
   &-item {
     display: flex;
     align-items: center;
     gap: 0 40px;
+    &_text {
+      color: $text-color;
+    }
+  }
+  &-icon {
+    display: flex;
+    align-items: center;
+    gap: 0 16px;
+    &_mess {
+      border-radius: 50%;
+      padding: 1px 8px 5px 8px;
+      background-color: $bgc-icon 20%;
+    }
+
+    &_notif {
+      border-radius: 50%;
+      padding: 1px 8px 5px 8px;
+      background-color: $bgc-icon 20%;
+    } 
+
+    &_info {
+      display: flex;
+      align-items: center;
+      gap: 0 8px;
+    }
+  }
+}
+.info-icon {
+  border: 1px solid $primary-color;
+  border-radius: 50%;
+  padding: 1px 8px 5px 8px;
+}
+
+#icon {
+  width: 16px;
+  height: 16px;
+}
+
+.menu-info_name {
+  color: $text-color;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// .menu-link {
+//   cursor: pointer;
+//   a {
+//     &.nuxt-link-active{
+//       color: $primary-color !important;
+//       font-weight: 500;
+//     }
+//   }
+// }
+
+.menu-link {
+  cursor: pointer;
+
+  a {
+    &.nuxt-link-active {
+      color: $primary-color !important;
+    }
   }
 }
 
