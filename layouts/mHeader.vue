@@ -3,13 +3,15 @@
       <div class="menuNav">
           <div class="menu">
             <div class="menu-title"> 
-              <img src="@/assets/img/logo.png" alt="error-icon">
+              <nuxt-link to="/">
+                <img src="@/assets/img/logo.png" alt="error-icon">
+              </nuxt-link>
             </div>
             <ul class="menu-item">
               <li v-for="(item, index) in menuNav" :key="index">
                 <div class="menu-link">
                   <nuxt-link :to="item.href">
-                    <div> {{ item.title }} </div>
+                    {{ item.title }}
                   </nuxt-link>
                 </div>
               </li>
@@ -26,7 +28,7 @@
                 </div>
               </li>
               <li class="menu-icon_info">
-                <div class="menu-webcome">Xin chào,</div>
+                <div class="menu-webcome">Xin chào:</div>
                 <div class="menu-info">
                   <div class="menu-info_name">Đức Thịnh</div>
                 </div>
@@ -133,26 +135,22 @@ export default {
   color: $text-color;
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
 }
-
-// .menu-link {
-//   cursor: pointer;
-//   a {
-//     &.nuxt-link-active{
-//       color: $primary-color !important;
-//       font-weight: 500;
-//     }
-//   }
-// }
 
 .menu-link {
   cursor: pointer;
-
   a {
+    color: $text-color;
     &.nuxt-link-active {
       color: $primary-color !important;
     }
   }
+}
+.menu-webcome {
+  color: $primary-color;
+  font-weight: 550;
+  font-size: 16px;
 }
 
 </style>
