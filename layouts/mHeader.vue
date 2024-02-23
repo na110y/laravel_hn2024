@@ -102,12 +102,14 @@ export default {
     align-items: center;
     gap: 0 16px;
     &_mess {
+      cursor: pointer;
       border-radius: 50%;
       padding: 1px 8px 5px 8px;
       background-color: $bgc-icon 20%;
     }
 
     &_notif {
+      cursor: pointer;
       border-radius: 50%;
       padding: 1px 8px 5px 8px;
       background-color: $bgc-icon 20%;
