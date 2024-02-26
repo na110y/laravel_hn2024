@@ -42,7 +42,20 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
+    'cookie-universal-nuxt',
   ],
+  auth:{
+    strategies:{
+      'laravelSanctum': {
+        provider: 'laravel/sanctum',
+        url: 'http://localhost:8000',
+        endpoints: {
+          login: { url: '/api/login' },
+          logout: { url: '/api/logout' }
+        }
+      }
+    }
+  },
 
   axios: {
     baseURL: '/',

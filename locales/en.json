@@ -1,7 +1,9 @@
 {
     "common" : {
       "lang": "English",
-      "welcome": "Welcome"
+      "welcome": "Welcome",
+      "login": "Log in",
+      "logout": "Log out"
     },
     "header": {
         "home": "Home",

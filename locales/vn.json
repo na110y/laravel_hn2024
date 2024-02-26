@@ -1,7 +1,9 @@
 {
     "common" : {
         "lang": "Tiếng việt",
-        "welcome": "Xin chào"
+        "welcome": "Xin chào",
+        "login": "Đăng nhập",
+        "logout": "Đăng xuất"
   
     },
     "header": {

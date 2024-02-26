@@ -54,10 +54,15 @@
                 </div>
               </li>
               <li class="menu-icon_info">
+               <div class="menu-logout" v-if="user_name">
                 <div class="menu-webcome">{{ $t('common.welcome') }}:</div>
                 <div class="menu-info">
-                  <div class="menu-info_name" @click="info_login">Đức Thịnh</div>
+                  <div class="menu-info_name" @click="info_login">{{ user_name }}</div>
                 </div>
+               </div>
+               <div class="menu-login" v-else>
+                <nuxt-link to="/login/" class="menu-login_txt">{{ $t('common.login') }}</nuxt-link>
+               </div>
                 <div class="modal_info" v-show="isShowInfoLogin">
                   <div class="modal_info-setting">
                     <b-form-group
@@ -79,7 +84,7 @@
                     </b-form-group>
 
                     <div class="btn_info"> 
-                      <b-button type="button" class="btn_info-logout">Đăng xuất</b-button>
+                      <b-button type="button" class="btn_info-logout" @click.prevent="logout">{{ $t('common.logout') }}</b-button>
                     </div>
                   </div>
                 </div>
@@ -94,6 +99,18 @@
             </b-modal>
           </div>
         </div>
+
+        <b-toast
+          ref="customToast"
+          no-auto-hide
+          :variant="toastVariant"
+          class="my-custom-toast"
+          >
+            <template #toast-title>
+                <strong>Thông báo</strong>
+            </template>
+            <span class="my-custom-toast-message">{{ toastMessage }}</span>
+        </b-toast>
     </b-container>
 </template>
   
@@ -102,15 +119,22 @@
 export default {
   data() {
     return {
+      toastVariant: "info",
+      toastMessage: null,
       options: [
           { value: 'vn', text: 'Tiếng Việt' },
           { value: 'en', text: 'Tiếng Anh' },
       ],
       isShowInfoLogin : false,
+      user_name:'',
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
+    const userLogin = JSON.parse(localStorage.getItem('user_name')) || JSON.parse(sessionStorage.getItem('user_name'));
+    if (userLogin) {
+        this.user_name = userLogin;
+    }
   },
   methods: {
     changeLanguage(locale) {
@@ -127,6 +151,30 @@ export default {
       if (!this.$el.contains(event.target)) {
         this.isShowInfoLogin = false;
       }
+    },
+
+    async logout() {
+      try {
+        await this.$auth.logout();
+        this.user_name = this.$store.getters.user_name || '';
+        // localStorage.removeItem('user_name');
+        // sessionStorage.removeItem('user_name');
+        this.showToast('success', 'Đăng xuất thành công!');
+        // this.user_name = '';
+        this.$router.push('/login');
+      } catch (error) {
+          console.error(error);
+      }
+    },
+
+    showToast(variant, message) {
+      this.toastVariant = variant;
+      this.toastMessage = message;
+      this.$refs.customToast.show();
+
+      setTimeout(() => {
+          this.$refs.customToast.hide();
+      }, 3000);
     },
 
   },
@@ -264,5 +312,15 @@ export default {
   cursor: pointer;
 }
 
+.menu-logout {
+  display: flex;
+  align-items: center;
+  gap: 0 8px;
+}
 
+.menu-login {
+  &_txt {
+    color: $text-color;
+  }
+}
 </style>

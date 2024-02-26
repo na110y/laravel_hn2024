@@ -7,7 +7,7 @@
         ></loading>
 
         <div class="content">
-            <b-form class="login" @submit.prevent="onSubmit" ref="loginForm">
+            <b-form class="login" @submit.prevent="login" ref="loginForm">
                 <div class="login-title">{{ $t('login.title') }}</div>
                 <div class="login-icon">
                     <img src="@/assets/img/login.svg" alt="error-icon">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="login-userName">
                     <b-form-group id="login-label" :label="$t('login.userName')" label-for="input-1">
-                        <b-form-input id="input-1" v-model="userLogin.user_name"></b-form-input>
+                        <b-form-input id="input-1" v-model="userLogin.user_email"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userPasswork">
@@ -61,33 +61,36 @@ export default {
     components: {
         Loading
     },
-    async asyncData({ store }) {
-        await store.dispatch('setUserLogin')
-    },
     
     data() {
         return {
             userLogin: {
-                name: '',
-                user_name: '',
+                user_email: '',
                 user_passwork: ''
             },
             toastVariant: "info",
             toastMessage: null,
             isPasswordVisible: false,
-            isLoading: false
+            isLoading: false,
+            user_name: ''
         }
     },
-    mounted() {
-        const userLogin = JSON.parse(localStorage.getItem('userLogin')) || JSON.parse(sessionStorage.getItem('userLogin'));
-        if (userLogin) {
-            this.$store.commit("SET_LOGIN", userLogin);
-        };
-
-        this.$axios.$get('/sanctum/csrf-cookie');
-        document.cookie.includes('XSRF-TOKEN');
-    },
     methods: {
+        async login() {
+            try {
+                const response = await this.$auth.loginWith('laravelSanctum', {
+                data: {
+                    email: this.userLogin.user_email,
+                    password: this.userLogin.user_passwork
+                }
+                });
+                const userName = response.data.user_name;
+                this.$store.commit('SET_INFOLOGIN', userName);
+                this.$router.push("/");
+            } catch (error) {
+                console.log(error);
+            }
+        },
         showToast(variant, message) {
             this.toastVariant = variant;
             this.toastMessage = message;
@@ -101,50 +104,6 @@ export default {
         isShowType() {
             this.isPasswordVisible = !this.isPasswordVisible;
         },
-
-        async onSubmit() {
-            try {
-                // const formData = new FormData(this.$refs.loginForm);
-                // await this.$auth.loginWith('laravelSanctum', {data:formData});
-                // this.showToast("success", "Đăng nhập thành công!");
-                // this.$router.push("/");
-                const params = {
-                    userLogin: this.userLogin
-                }
-                await this.$auth.loginWith('laravelSanctum', {data:params});
-                sessionStorage.setItem('userLogin', JSON.stringify(this.userLogin));
-                localStorage.setItem('userLogin', JSON.stringify(this.userLogin));
-                this.$router.push("/");
-            } catch (error) {
-               console.log(error);
-            }
-
-
-            // this.isLoading = true;
-            // const params = {
-            //     userLogin: this.userLogin
-            // }
-            // this.$axios
-            // .post("http://localhost:8080/api/login-api/post-login", params)
-            // .then((res) => {
-            //     if(res.data.status === 200) {
-            //         sessionStorage.setItem('userLogin', JSON.stringify(this.userLogin));
-            //         localStorage.setItem('userLogin', JSON.stringify(this.userLogin));
-            //         this.$store.commit("SET_LOGIN", this.userLogin);
-            //         this.showToast("success", "Đăng nhập thành công!");
-            //         this.$router.push("/");
-            //     }else if (res.data.status === 500) {
-            //         this.showToast("warning", "Tài khoản hoặc mật khẩu không đúng!");
-            //     }
-            //     this.isLoading = false;
-
-            // })
-            // .catch((err) => {
-            //     console.error("Error fetching data:", err);
-            // });
-        },
-
-
     }
 }
 </script>

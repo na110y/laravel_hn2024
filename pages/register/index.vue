@@ -18,23 +18,23 @@
                 </div>
                 <div class="login-name">
                     <b-form-group id="login-label" label="Name" label-for="input-1">
-                        <b-form-input id="input-1" v-model="userRegister.name"></b-form-input>
+                        <b-form-input id="input-1" v-model="userRegister.user_name"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userName">
                     <b-form-group id="login-label" :label="$t('logout.userName')" label-for="input-1">
-                        <b-form-input id="input-1" v-model="userRegister.user_name"></b-form-input>
+                        <b-form-input id="input-1" v-model="userRegister.user_email"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userPasswork">
                     <b-form-group id="login-label" :label="$t('logout.userPassword')" label-for="input-1">
-                        <b-form-input :type="isPasswordPW ? 'text' : 'password'" id="input-1" v-model="userRegister.user_passwork" ></b-form-input>
+                        <b-form-input :type="isPasswordPW ? 'text' : 'password'" id="input-1" v-model="userRegister.user_password" ></b-form-input>
                         <img src="@/assets/img/mat.svg" alt="error-icon" id="icon-mat" @click="isShowTypePW()">
                     </b-form-group>
                 </div>
                 <div class="login-checkPasswork">
                     <b-form-group id="login-label" :label="$t('logout.thePassword')" label-for="input-1">
-                        <b-form-input :type="isPasswordCheck ? 'text' : 'password'" id="input-1" v-model="userRegister.check_passwork" ></b-form-input>
+                        <b-form-input :type="isPasswordCheck ? 'text' : 'password'" id="input-1" v-model="userRegister.check_password" ></b-form-input>
                         <img src="@/assets/img/mat.svg" alt="error-icon" id="icon-mat" @click="isShowTypeCheck()">
                     </b-form-group>
                 </div>
@@ -67,10 +67,10 @@ export default {
     data() {
         return {
             userRegister: {
-                name: '',
                 user_name: '',
-                user_passwork: '',
-                check_passwork: ''
+                user_email: '',
+                user_password: '',
+                check_password: ''
             },
             toastVariant: "info",
             toastMessage: null,
@@ -80,26 +80,27 @@ export default {
         }
     },
     methods: {
-        onSubmit() {
-            this.isLoading = true;
-            const params = {
-                userRegister :  this.userRegister
-            }
-            this.$axios
-            .post("http://localhost:8080/api/login-api/post-register", params)
-            .then((res) => {
-                if(res.data.status === 200) {
-                    this.showToast("success", "Đăng ký thành công!");
-                }else if (res.data.status === 400) {
-                    this.showToast("warning", "Nhập lại mật khẩu không trùng khớp với mật khẩu!");
-                }else if (res.data.status === 500) {
-                    this.showToast("info", "Tài khoản đã tồn tại!");
+        async onSubmit() {
+            try {
+                const param = {
+                    user_name: this.userRegister.user_name,
+                    user_email: this.userRegister.user_email,
+                    user_password: this.userRegister.user_password,
+                    check_password: this.userRegister.check_password,
                 }
-                this.isLoading = false;
-            })
-            .catch((err) => {
-                console.error("Error fetching data:", err);
-            });
+
+                const csrfToken = this.$cookies.get('XSRF-TOKEN');
+                const headers = {
+                    'X-XSRF-TOKEN': csrfToken,
+                };
+                await this.$axios.post('http://localhost:8000/api/register', param, { headers });
+                // await this.$axios.post('http://localhost:8000/api/registerLogin', param);
+
+                this.showToast('success', 'Đăng ký thành công!');
+            } catch (error) {
+                console.log(error);
+                this.showToast('info', 'Đã xảy ra lỗi trong quá trình đăng ký');
+            }
         },
 
         isShowTypePW() {
