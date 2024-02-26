@@ -8,5 +8,24 @@
         "product": "Product",
         "cart": "Cart",
         "about": "About us"
+    },
+    "login": {
+        "title": "Log in",
+        "isLogin": "Do not have an account?",
+        "account": "Create Account",
+        "userName": "Email / Username",
+        "userPassword": "Password",
+        "login": "Log in",
+        "loginFB": "Sign in with Facebook",
+        "forgotPw": "Forgot password"
+    },
+    "logout": {
+        "title": "Register",
+        "isLogin": "Do you already have an account?",
+        "account": "Create Account",
+        "userName": "Email / Username",
+        "userPassword": "Password",
+        "thePassword": "Enter the password",
+        "login": "Log in"
     }
 }

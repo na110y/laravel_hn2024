@@ -8,35 +8,35 @@
 
         <div class="content">
             <b-form class="login" @submit.prevent="onSubmit" ref="loginForm">
-                <div class="login-title">Đăng nhập</div>
+                <div class="login-title">{{ $t('login.title') }}</div>
                 <div class="login-icon">
                     <img src="@/assets/img/login.svg" alt="error-icon">
                 </div>
                 <div class="login-register">
-                    <div class="login-register_txt">Bạn chưa có tài khoản?</div>
-                    <nuxt-link to="/register/" class="login-register_link">Tạo tài khoản</nuxt-link>
+                    <div class="login-register_txt">{{ $t('login.isLogin') }}</div>
+                    <nuxt-link to="/register/" class="login-register_link">{{ $t('login.account') }}</nuxt-link>
                 </div>
                 <div class="login-userName">
-                    <b-form-group id="login-label" label="Email / Tên đăng nhập" label-for="input-1">
+                    <b-form-group id="login-label" :label="$t('login.userName')" label-for="input-1">
                         <b-form-input id="input-1" v-model="userLogin.user_name"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userPasswork">
-                    <b-form-group id="login-label" label="Mật khẩu" label-for="input-1">
+                    <b-form-group id="login-label" :label="$t('login.userPassword')" label-for="input-1">
                         <b-form-input :type="isPasswordVisible ? 'text' : 'password'" id="input-1" v-model="userLogin.user_passwork"></b-form-input>
                         <img src="@/assets/img/mat.svg" alt="error-icon" id="icon-mat" @click="isShowType()">
                     </b-form-group>
                 </div>
 
                 <div class="login-login">
-                    <b-button class="login-submit" type="submit"> Đăng nhập </b-button>
+                    <b-button class="login-submit" type="submit"> {{ $t('login.login') }} </b-button>
                 </div>
                 <div class="login-or">
                     <img src="@/assets/img/or.svg" alt="error-icon">
                 </div>
                 <div class="login-fb">
-                    <nuxt-link to="" class="login-fb-text">Đăng nhập bằng FaceBook</nuxt-link>
-                    <b-button class="btn-forgot">Quên mật khẩu</b-button>
+                    <nuxt-link to="" class="login-fb-text">{{ $t('login.loginFB') }}</nuxt-link>
+                    <b-button class="btn-forgot">{{ $t('login.forgotPw') }}</b-button>
                 </div>
             </b-form>
         </div>
@@ -159,6 +159,7 @@ export default {
     border: 1px solid #ced4da;
     border-radius: 16px;
     padding: 20px 16px;
+    margin: 50px 0;
     &-title {
         text-align: center;
         font-weight: 700;
@@ -267,5 +268,8 @@ export default {
             color: $text-color;
         }
     }
+}
+input {
+    border: 1px solid $border;
 }
 </style>

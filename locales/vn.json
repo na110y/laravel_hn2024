@@ -9,5 +9,24 @@
         "product": "Sản Phẩm",
         "cart": "Giỏ hàng",
         "about": "Hệ thống cửa hàng"
+    },
+    "login": {
+        "title": "Đăng nhập",
+        "isLogin": "Bạn chưa có tài khoản?",
+        "account": "Tạo tài khoản",
+        "userName": "Email / Tên đăng nhập",
+        "userPassword": "Mật khẩu",
+        "login": "Đăng nhập",
+        "loginFB": "Đăng nhập bằng FaceBook",
+        "forgotPw": "Quên mật khẩu"
+    },
+    "logout": {
+        "title": "Đăng ký",
+        "isLogin": "Bạn đã có tài khoản?",
+        "account": "Create Account",
+        "userName": "Email / Tên đăng nhập",
+        "userPassword": "Mật khẩu",
+        "thePassword": "Nhập lại mật khẩu",
+        "login": "Log in"
     }
 }
