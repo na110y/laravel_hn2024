@@ -19,6 +19,7 @@ export default {
 
   plugins: [
     '~/plugins/api/userApi.js',
+    '~/plugins/i18n.js'
   ],
 
   components: true,
@@ -38,6 +39,7 @@ export default {
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
   ],
 
   axios: {

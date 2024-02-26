@@ -1,0 +1,12 @@
+{
+    "common" : {
+        "lang": "Tiếng việt",
+        "welcome": "Xin chào"
+  
+    },
+    "header": {
+        "home": "Trang chủ",
+        "product": "Sản Phẩm",
+        "cart": "Cửa hàng"
+    }
+}

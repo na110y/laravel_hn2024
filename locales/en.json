@@ -1,0 +1,11 @@
+{
+    "common" : {
+      "lang": "English",
+      "welcome": "Welcome"
+    },
+    "header": {
+        "home": "Home",
+        "product": "Product",
+        "cart": "Cart"
+    }
+}

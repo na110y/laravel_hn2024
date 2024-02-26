@@ -1,5 +1,5 @@
 <template>
     <div>
-        thuê người chơi
+        sản phẩm
     </div>
 </template>

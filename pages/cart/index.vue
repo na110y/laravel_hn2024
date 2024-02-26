@@ -1,5 +1,5 @@
 <template>
     <div>
-        đang theo dõi
+        cart
     </div>
 </template>

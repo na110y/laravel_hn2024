@@ -8,10 +8,24 @@
               </nuxt-link>
             </div>
             <ul class="menu-item">
-              <li v-for="(item, index) in menuNav" :key="index">
+              <li>
                 <div class="menu-link">
-                  <nuxt-link :to="item.href">
-                    {{ item.title }}
+                  <nuxt-link to="/">
+                    {{ $t('header.home') }}
+                  </nuxt-link>
+                </div>
+              </li>
+              <li>
+                <div class="menu-link">
+                  <nuxt-link to="/product">
+                    {{ $t('header.product') }}
+                  </nuxt-link>
+                </div>
+              </li>
+              <li>
+                <div class="menu-link">
+                  <nuxt-link to="/cart">
+                    {{ $t('header.cart') }}
                   </nuxt-link>
                 </div>
               </li>
@@ -28,12 +42,32 @@
                 </div>
               </li>
               <li class="menu-icon_info">
-                <div class="menu-webcome">Xin chào:</div>
+                <div class="menu-webcome">{{ $t('common.welcome') }}:</div>
                 <div class="menu-info">
                   <div class="menu-info_name">Đức Thịnh</div>
                 </div>
               </li>
             </ul>
+            <div>
+              <b-form-group
+                id="input-group-1"
+                label-for="search-available"
+                class="mt-2"
+              >
+                <b-form-select
+                  v-model="$i18n.locale"
+                  @change="changeLanguage"
+                  id="lang"
+                >
+                  <option v-for="item in options" 
+                    :value="item.value" 
+                    :key="'subdistric__contry_' + item">
+                      {{ item.text  }}
+                  </option>
+                </b-form-select>
+              </b-form-group>
+
+            </div>
           </div>
         </div>
     </b-container>
@@ -44,31 +78,16 @@
 export default {
   data() {
     return {
-      menuNav: [
-        {
-          href: '/',
-          title: 'Trang chủ',
-        },
-        {
-          href: '/players/',
-          title: 'Thuê người chơi',
-        },
-        {
-          href: '/watching/',
-          title: 'Đang theo dõi',
-        },
-      ],
-      isOpen: false,
-      isOpenLever: false
+      options: [
+          { value: 'vn', text: 'Tiếng Việt' },
+          { value: 'en', text: 'Tiếng Anh' },
+        ]
     };
   },
   methods: {
-    toggleDropdown() {
-      this.isOpen = !this.isOpen;
-    },
-    btnShowLever() {
-      this.isOpenLever = !this.isOpenLever;
-    },
+    changeLanguage(locale) {
+      this.$store.dispatch('changeLanguage', locale)
+    }
 
   },
 };
@@ -78,6 +97,9 @@ export default {
 @import "@/assets/styles/main.scss";
 .menuNav {
   border-bottom: 1px solid $border;
+}
+::v-deep #lang {
+  width: 100px;
 }
 .menu {
   background-color: $bgc-body;
