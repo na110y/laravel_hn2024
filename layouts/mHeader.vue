@@ -29,8 +29,20 @@
                   </nuxt-link>
                 </div>
               </li>
+              <li>
+                <div class="menu-link">
+                  <nuxt-link to="/about">
+                    {{ $t('header.about') }}
+                  </nuxt-link>
+                </div>
+              </li>
             </ul>
             <ul class="menu-icon">
+              <li>
+                <div class="menu-icon_mess">
+                  <img src="@/assets/img/search.svg" alt="error-icon" id="icon" @click.prevent="btnSearch">
+                </div>
+              </li>
               <li>
                 <div class="menu-icon_mess">
                   <img src="@/assets/img/mess.svg" alt="error-icon" id="icon">
@@ -44,30 +56,42 @@
               <li class="menu-icon_info">
                 <div class="menu-webcome">{{ $t('common.welcome') }}:</div>
                 <div class="menu-info">
-                  <div class="menu-info_name">Đức Thịnh</div>
+                  <div class="menu-info_name" @click="info_login">Đức Thịnh</div>
+                </div>
+                <div class="modal_info" v-show="isShowInfoLogin">
+                  <div class="modal_info-setting">
+                    <b-form-group
+                        id="input-group-1"
+                        label-for="search-available"
+                        class="mt-2"
+                      >
+                        <b-form-select
+                          v-model="$i18n.locale"
+                          @change="changeLanguage"
+                          id="lang"
+                        >
+                          <option v-for="(item, index) in options" 
+                            :value="item.value" 
+                            :key="index">
+                              {{ item.text  }}
+                          </option>
+                        </b-form-select>
+                    </b-form-group>
+
+                    <div class="btn_info"> 
+                      <b-button type="button" class="btn_info-logout">Đăng xuất</b-button>
+                    </div>
+                  </div>
                 </div>
               </li>
             </ul>
-            <div>
+            <b-modal id="modal-search" title="Tìm kiếm sản phẩm" hide-footer>
               <b-form-group
-                id="input-group-1"
-                label-for="search-available"
-                class="mt-2"
               >
-                <b-form-select
-                  v-model="$i18n.locale"
-                  @change="changeLanguage"
-                  id="lang"
-                >
-                  <option v-for="item in options" 
-                    :value="item.value" 
-                    :key="'subdistric__contry_' + item">
-                      {{ item.text  }}
-                  </option>
-                </b-form-select>
+                <b-form-input id="search-product" placeholder="Tìm kiếm theo từ khóa..."></b-form-input>
+                <img src="@/assets/img/search.svg" alt="error-icon" id="icon-search">
               </b-form-group>
-
-            </div>
+            </b-modal>
           </div>
         </div>
     </b-container>
@@ -81,13 +105,29 @@ export default {
       options: [
           { value: 'vn', text: 'Tiếng Việt' },
           { value: 'en', text: 'Tiếng Anh' },
-        ]
+      ],
+      isShowInfoLogin : false,
     };
+  },
+  mounted() {
+    window.addEventListener("click", this.handleClickOutside);
   },
   methods: {
     changeLanguage(locale) {
       this.$store.dispatch('changeLanguage', locale)
-    }
+    },
+    info_login() {
+      this.isShowInfoLogin = !this.isShowInfoLogin;
+      
+    },
+    btnSearch() {
+      this.$bvModal.show("modal-search");
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.isShowInfoLogin = false;
+      }
+    },
 
   },
 };
@@ -99,7 +139,7 @@ export default {
   border-bottom: 1px solid $border;
 }
 ::v-deep #lang {
-  width: 100px;
+  width: 100%;
 }
 .menu {
   background-color: $bgc-body;
@@ -176,5 +216,53 @@ export default {
   font-weight: 550;
   font-size: 16px;
 }
+.menu-icon_info {
+  position: relative;
+}
+.modal_info {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  &-setting {
+    width: 200px;
+    height: 100px;
+    z-index: 999;
+    background-color: $bgc-body;
+    border: 1px solid $border;
+    padding: 0 10px 0 20px;
+  } 
+}
+
+.btn_info {
+  margin-top: 8px;
+  &-logout {
+    padding: 4px 8px;
+    width: 100%;
+    background-color: $bgc-info;
+    color: $color-info;
+    border-radius: 8px;
+  }
+}
+
+.setting-lang {
+    display: flex;
+    align-items: center;
+    gap: 0 8px;
+}
+
+#search-product {
+  border: 1px solid $border-input;
+  width: 100%;
+  padding: 8px 12px;
+  position: relative;
+}
+
+#icon-search {
+  position: absolute;
+  top: 28px;
+  right: 30px;
+  cursor: pointer;
+}
+
 
 </style>

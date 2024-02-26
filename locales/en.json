@@ -6,6 +6,7 @@
     "header": {
         "home": "Home",
         "product": "Product",
-        "cart": "Cart"
+        "cart": "Cart",
+        "about": "About us"
     }
 }
