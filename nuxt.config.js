@@ -19,7 +19,9 @@ export default {
 
   plugins: [
     '~/plugins/api/userApi.js',
-    '~/plugins/i18n.js'
+    '~/plugins/i18n.js',
+    '~/plugins/utils/validate.js',
+    
   ],
 
   components: true,
