@@ -16,6 +16,9 @@ export default {
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css'
   ],
+  bootstrapVue: {
+    icons: true,
+  },
 
   plugins: [
     '~/plugins/api/userApi.js',
@@ -42,7 +45,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
-    'cookie-universal-nuxt',
+    // 'cookie-universal-nuxt',
   ],
   auth:{
     strategies:{
@@ -58,7 +61,8 @@ export default {
   },
 
   axios: {
-    baseURL: '/',
+    baseURL: 'http://localhost:8000',
+    credentials: true
   },
 
   pwa: {

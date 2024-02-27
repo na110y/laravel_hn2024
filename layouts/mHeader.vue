@@ -54,10 +54,10 @@
                 </div>
               </li>
               <li class="menu-icon_info">
-               <div class="menu-logout" v-if="user_name">
+               <div class="menu-logout" v-if="$auth.user">
                 <div class="menu-webcome">{{ $t('common.welcome') }}:</div>
                 <div class="menu-info">
-                  <div class="menu-info_name" @click="info_login">{{ user_name }}</div>
+                  <div class="menu-info_name" @click="info_login">{{ $auth.user.name }}</div>
                 </div>
                </div>
                <div class="menu-login" v-else>
@@ -65,7 +65,7 @@
                </div>
                 <div class="modal_info" v-show="isShowInfoLogin">
                   <div class="modal_info-setting">
-                    <b-form-group
+                    <!-- <b-form-group
                         id="input-group-1"
                         label-for="search-available"
                         class="mt-2"
@@ -81,7 +81,13 @@
                               {{ item.text  }}
                           </option>
                         </b-form-select>
-                    </b-form-group>
+                    </b-form-group> -->
+
+                    <div class="btn_info"> 
+                      <nuxt-link to="/profile">
+                        <b-button type="button" class="btn_info-profile">{{ $t('common.profile') }}</b-button>
+                      </nuxt-link>
+                    </div>
 
                     <div class="btn_info"> 
                       <b-button type="button" class="btn_info-logout" @click.prevent="logout">{{ $t('common.logout') }}</b-button>
@@ -116,7 +122,9 @@
   
 <script>
 
+// import { mapState } from 'vuex';
 export default {
+  middleware: ['auth'],
   data() {
     return {
       toastVariant: "info",
@@ -126,15 +134,10 @@ export default {
           { value: 'en', text: 'Tiếng Anh' },
       ],
       isShowInfoLogin : false,
-      user_name:'',
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
-    const userLogin = JSON.parse(localStorage.getItem('user_name')) || JSON.parse(sessionStorage.getItem('user_name'));
-    if (userLogin) {
-        this.user_name = userLogin;
-    }
   },
   methods: {
     changeLanguage(locale) {
@@ -142,7 +145,6 @@ export default {
     },
     info_login() {
       this.isShowInfoLogin = !this.isShowInfoLogin;
-      
     },
     btnSearch() {
       this.$bvModal.show("modal-search");
@@ -156,11 +158,8 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
-        this.user_name = this.$store.getters.user_name || '';
-        // localStorage.removeItem('user_name');
-        // sessionStorage.removeItem('user_name');
+        this.$store.commit('SET_INFOLOGIN', );
         this.showToast('success', 'Đăng xuất thành công!');
-        // this.user_name = '';
         this.$router.push('/login');
       } catch (error) {
           console.error(error);
@@ -272,12 +271,12 @@ export default {
   top: 25px;
   right: 0;
   &-setting {
-    width: 200px;
-    height: 100px;
+    width: 250px;
+    height: 120px;
     z-index: 999;
     background-color: $bgc-body;
     border: 1px solid $border;
-    padding: 0 10px 0 20px;
+    padding: 15px;
   } 
 }
 
@@ -289,6 +288,13 @@ export default {
     background-color: $bgc-info;
     color: $color-info;
     border-radius: 8px;
+  }
+  &-profile {
+    padding: 4px 8px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: $color-info;
+    color: $bgc-body;
   }
 }
 

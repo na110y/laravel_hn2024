@@ -1,7 +1,9 @@
 <template>
   <div>
     <div>content</div>
-    <div>{{ listUser }}</div>
+    <!-- <div v-for="(items, index) in listUser" :key="index">
+      <img :src="items.img" alt="">
+    </div> -->
   </div>
 </template>
 

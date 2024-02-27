@@ -3,7 +3,8 @@
       "lang": "English",
       "welcome": "Welcome",
       "login": "Log in",
-      "logout": "Log out"
+      "logout": "Log out",
+      "profile": "Profile"
     },
     "header": {
         "home": "Home",

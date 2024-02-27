@@ -18,12 +18,12 @@
                 </div>
                 <div class="login-name">
                     <b-form-group id="login-label" label="Name" label-for="input-1">
-                        <b-form-input id="input-1" v-model="userRegister.user_name"></b-form-input>
+                        <b-form-input type="text" id="input-1" v-model="userRegister.user_name"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userName">
                     <b-form-group id="login-label" :label="$t('logout.userName')" label-for="input-1">
-                        <b-form-input id="input-1" v-model="userRegister.user_email"></b-form-input>
+                        <b-form-input type="email" id="input-1" v-model="userRegister.user_email"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userPasswork">
@@ -79,6 +79,9 @@ export default {
             isLoading: false,
         }
     },
+    mounted() {
+        this.$axios.$get('/sanctum/csrf-cookie');
+    },
     methods: {
         async onSubmit() {
             try {
@@ -89,12 +92,24 @@ export default {
                     check_password: this.userRegister.check_password,
                 }
 
-                const csrfToken = this.$cookies.get('XSRF-TOKEN');
-                const headers = {
-                    'X-XSRF-TOKEN': csrfToken,
-                };
-                await this.$axios.post('http://localhost:8000/api/register', param, { headers });
-                // await this.$axios.post('http://localhost:8000/api/registerLogin', param);
+                await this.$axios.post('http://localhost:8000/api/register', param).then(res => {
+                    this.$auth.loginWith('laravelSanctum', {
+                    data: {
+                        email: this.userRegister.user_email,
+                        password: this.userRegister.user_password
+                    }
+                    });
+                this.$router.push("/");
+                });
+                // const response = await this.$axios.post('http://localhost:8000/api/register', param);
+                // if (response.data.token) {
+                //     this.$auth.setToken('laravelSanctum', response.data.token);
+                //     await this.$auth.fetchUser();
+                //     this.$router.push("/");
+                //     this.showToast('success', 'Đăng ký thành công!');
+                // } else {
+                //     this.showToast('error', 'Đăng ký thất bại');
+                // }
 
                 this.showToast('success', 'Đăng ký thành công!');
             } catch (error) {

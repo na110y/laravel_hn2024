@@ -78,14 +78,12 @@ export default {
     methods: {
         async login() {
             try {
-                const response = await this.$auth.loginWith('laravelSanctum', {
+                await this.$auth.loginWith('laravelSanctum', {
                 data: {
                     email: this.userLogin.user_email,
                     password: this.userLogin.user_passwork
                 }
                 });
-                const userName = response.data.user_name;
-                this.$store.commit('SET_INFOLOGIN', userName);
                 this.$router.push("/");
             } catch (error) {
                 console.log(error);

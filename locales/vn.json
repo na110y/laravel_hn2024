@@ -3,7 +3,8 @@
         "lang": "Tiếng việt",
         "welcome": "Xin chào",
         "login": "Đăng nhập",
-        "logout": "Đăng xuất"
+        "logout": "Đăng xuất",
+        "profile": "Hồ sơ"
   
     },
     "header": {
@@ -11,6 +12,7 @@
         "product": "Sản Phẩm",
         "cart": "Giỏ hàng",
         "about": "Hệ thống cửa hàng"
+
     },
     "login": {
         "title": "Đăng nhập",
