@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -23,9 +26,8 @@ class LoginController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
-                $user_name = $user->name;
-                session(['user_name' => $user_name]);
-                return response()->json(['message' => 'Đăng nhập thành công', 'user_name' => $user_name], 200);
+                $request->session()->put('user', $user);
+                return response()->json(['message' => 'Đăng nhập thành công'], 200);
             } else {
                 throw new AuthenticationException('Thông tin đăng nhập không hợp lệ');
             }
@@ -34,20 +36,35 @@ class LoginController extends Controller
         }
     }
 
+    public function register(Request $request)
+    {
+        try {
+            $user = new User();
+            $user->name = $request->user_name;
+            $user->email = $request->user_email;
+            $user->password = bcrypt($request->password);
+            $user->email_verified_at = now();
+            $user->remember_token = Str::uuid();
+            $user->user_id = Str::uuid();
+
+            $user->save();
+
+            if (!$user) {
+                return response()->json(['error' => 'Đăng ký thất bại'], 500);
+            }
+            return response()->json(['message' => 'Đăng ký thành công'], 200);
+        } catch (\Exception $th) {
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            throw new \Exception('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+        }
+    }
+
     public function logout(Request $request)
     {
         try {
-            $user = $request->user();
-            if ($user) {
-                if ($user->tokens) {
-                    $user->tokens->each(function ($token, $key) {
-                        $token->delete();
-                    });
-                }
-                return response()->json(['message' => 'Đăng xuất thành công!'], 200);
-            } else {
-                return response()->json(['error' => 'Thất bại'], 500);
-            }
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return response()->json(['message' => 'Đăng xuất thành công!'], 200);
         } catch (\Exception $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());

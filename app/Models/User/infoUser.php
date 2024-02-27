@@ -10,19 +10,16 @@ class infoUser extends Model
     use HasFactory;
     protected $table = 'info_user';
     protected $fillable = [
-        "id",
+        "user_id",
         "fullName",
-        "age",
         "adress",
+        "sdt",
+        "img",
+        "free",
+        "gender",
+        "dateOfBirst",
         "created_at",
-        "update_at",
-        "staff",
+        "updated_at",
     ];
     public $timestamps = true;
-
-    public function __construct(array $attributes = [])
-    {
-        $this->connection = session('campus_db');
-        parent::__construct($attributes);
-    }
 }

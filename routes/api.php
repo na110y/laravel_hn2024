@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Register\RegisterController;
 use App\Http\Controllers\User\UserController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -25,10 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::prefix('info-user')->group(function () {
+    Route::get('/get-info-user', [UserController::class, 'getInfoUser']);
+    Route::post('/post-info-user', [UserController::class, 'postInfoUser'])->name('postInfoUser');
     Route::get('/get-list-user', [UserController::class, 'getListUser']);
     Route::post('/create-update', [UserController::class, 'postCreateOrEditBhytAvailableRegistrationPeriod']);
     Route::delete('/delete', [UserController::class, 'deleteBhytAvailableRegistrationPeriod']);
