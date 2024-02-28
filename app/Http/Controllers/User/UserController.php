@@ -16,13 +16,12 @@ class UserController extends Controller
     {
         try {
             $user = $request->session()->get('user');
-            $info_user = infoUser::query()
-            ->where('user_id', $user->user_id)
+            $info_user = infoUser::where('user_id', $user->user_id)
             ->select([
                 'info_user.*'
             ])
-            ->get();
-            return $info_user;
+            ->first();
+            return response()->json(['info_user' => $info_user]);
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([
@@ -75,6 +74,36 @@ class UserController extends Controller
         }
     }
 
+    // sửa thông tin của người dùng
+    public function updateInfo(Request $request) 
+    {
+        try {
+
+            $info_user = $request->session()->get('user');
+            $checkID = $info_user->id;
+            $user_info = infoUser::where('id', $checkID)->update([
+                'fullName' => $request->fullName,
+                'adress' => $request->adress,
+                'sdt' => $request->sdt,
+                'gender' => $request->gender,
+                'dateOfBirst' => $request->dateOfBirst,
+                'updated_at' => now(),
+                'staff' => $info_user->name,
+            ]);
+
+            if (!$user_info) {
+                return response()->json(['error' => 'Thất bại'], 500);
+            }
+            return response()->json(['message' => 'Thành công'], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response([
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
+    }
+
     public function getListUser(Request $request)
     {
         try {
@@ -82,8 +111,8 @@ class UserController extends Controller
             ->select([
                 'info_user.*'
             ])
-            ->orderBy('created_at', 'desc')->get();
-            return $info_user;
+            ->get();
+            return response()->json(['info_user' => $info_user[0]]);
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([
