@@ -30,8 +30,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::prefix('info-user')->group(function () {
     Route::get('/get-info-user', [UserController::class, 'getInfoUser']);
-    Route::post('/post-info-user', [UserController::class, 'postInfoUser'])->name('postInfoUser');
     Route::get('/get-list-user', [UserController::class, 'getListUser']);
     Route::post('/update-info', [UserController::class, 'updateInfo']);
-    Route::delete('/delete', [UserController::class, 'deleteBhytAvailableRegistrationPeriod']);
 });

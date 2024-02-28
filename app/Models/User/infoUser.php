@@ -11,6 +11,7 @@ class infoUser extends Model
     protected $table = 'info_user';
     protected $fillable = [
         "user_id",
+        "name",
         "fullName",
         "adress",
         "sdt",
