@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +34,8 @@ Route::prefix('info-user')->group(function () {
     Route::get('/get-info-user', [UserController::class, 'getInfoUser']);
     Route::get('/get-list-user', [UserController::class, 'getListUser']);
     Route::post('/update-info', [UserController::class, 'updateInfo']);
+});
+
+Route::prefix('product')->group(function () {
+    Route::get('/get-product', [ProductController::class, 'getProduct']);
 });
