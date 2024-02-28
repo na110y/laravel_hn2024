@@ -202,7 +202,7 @@ export default {
         /**
          * @description: Lưu thông tin thay đổi của người dùng
          */
-        saveInfoUser(info_user) {
+         async saveInfoUser(info_user) {
             this.is_loading = true;
             const param = {
                 fullName: this.info_user.fullName,
@@ -212,7 +212,7 @@ export default {
                 adress: this.info_user.adress,
             }
 
-            userApi.postInfoUser(info_user, param)
+            await userApi.postInfoUser(info_user, param)
             .then((res) => {
                 this.showToast('success', 'Cập nhập thành công!');
                 this.is_loading = false;
@@ -226,9 +226,9 @@ export default {
         /**
          * @description: lấy ra danh sách thông tin của người dùng
          */
-        listUserItem() {
+         async listUserItem() {
             this.is_loading = true;
-            userApi.getListUser()
+            await userApi.getListUser()
             .then((res) => {
                 this.info_user = res.data.info_user;
                 this.listUser = res.data.info_user;

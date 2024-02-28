@@ -67,12 +67,12 @@
                   <div class="modal_info-setting">
                     <div class="btn_info"> 
                       <nuxt-link to="/profile">
-                        <b-button type="button" class="btn_info-profile">{{ $t('common.profile') }}</b-button>
+                        <b-button type="button" class="btn_info-profile" @click="btnProfile">{{ $t('common.profile') }}</b-button>
                       </nuxt-link>
                     </div>
 
                     <div class="btn_info"> 
-                      <b-button type="button" class="btn_info-logout" @click.prevent="logout">{{ $t('common.logout') }}</b-button>
+                      <b-button type="button" class="btn_info-logout" @click="logout">{{ $t('common.logout') }}</b-button>
                     </div>
                   </div>
                 </div>
@@ -135,10 +135,16 @@ export default {
         await this.$auth.logout();
         this.$store.commit('SET_INFOLOGIN', );
         this.showToast('success', 'Đăng xuất thành công!');
+        this.isShowInfoLogin = !this.isShowInfoLogin;
         this.$router.push('/login');
       } catch (error) {
           console.error(error);
       }
+    },
+
+    btnProfile() {
+      console.log(1);
+      this.isShowInfoLogin = !this.isShowInfoLogin;
     },
 
     showToast(variant, message) {

@@ -84,6 +84,9 @@ export default {
     methods: {
         async onSubmit() {
             try {
+                if (this.userRegister.user_password !== this.userRegister.check_password) {
+                    return this.showToast('info', 'Mật khẩu nhập lại không khớp!');
+                }
                 const param = {
                     user_name: this.userRegister.user_name,
                     user_email: this.userRegister.user_email,
@@ -91,25 +94,21 @@ export default {
                     check_password: this.userRegister.check_password,
                 }
 
-                userApi.postInfoLogin(param)
-                .then(() => {
-                    // this.$auth.loginWith('laravelSanctum', {
-                    //     data: {
-                    //         email: this.userRegister.user_email,
-                    //         password: this.userRegister.user_password
-                    //     }
-                    // });
-
+                await userApi.postInfoLogin(param)
+                .then((res) => {
+                    this.$auth.loginWith('laravelSanctum', {
+                        data: {
+                            email: this.userRegister.user_email,
+                            password: this.userRegister.user_password
+                        }
+                    });
                     this.showToast('success', 'Đăng ký thành công!');
-                    this.$router.push("/login");
                     this.is_loading = false;
                 })
-                .catch((err) => {
-                    this.showToast('error', 'Đăng ký thất bại!');
+                .catch((error) => {
                     this.is_loading = false;
                 });
             } catch (error) {
-                console.log(error);
                 this.showToast('info', 'Đã xảy ra lỗi trong quá trình đăng ký');
             }
         },
