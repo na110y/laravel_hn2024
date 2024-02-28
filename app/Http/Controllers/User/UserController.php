@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\User\infoUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,10 +38,9 @@ class UserController extends Controller
     public function updateInfo(Request $request) 
     {
         try {
-
             $info_user = $request->session()->get('user');
-            $checkID = $info_user->id;
-            $user_info = infoUser::where('id', $checkID)->update([
+            $checkID = $info_user->user_id;
+            $user_info = infoUser::where('user_id', $checkID)->update([
                 'fullName' => $request->fullName,
                 'adress' => $request->adress,
                 'sdt' => $request->sdt,
