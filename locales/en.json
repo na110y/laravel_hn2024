@@ -38,7 +38,7 @@
         "userName": "Email / Username",
         "userPassword": "Password",
         "login": "Log in",
-        "loginFB": "Sign in with Facebook",
+        "loginFB": "Sign in with Gmail",
         "forgotPw": "Forgot password"
     },
     "logout": {

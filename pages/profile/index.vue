@@ -70,7 +70,7 @@
                                 <div class="column-content">
                                     <div class="column-content_info">
                                         <b-form-group id="login-label" :label="$t('profile.dateOfBirst')" label-for="search-student-code" class="mt-2">
-                                            <b-form-input class="custom-input" id="search-student-code" v-model="info_user.dateOfBirst"></b-form-input>
+                                            <b-form-input type="date" class="custom-input" id="search-student-code" v-model="info_user.dateOfBirst"></b-form-input>
                                         </b-form-group>
                                     </div>
 
@@ -210,6 +210,7 @@ export default {
                 dateOfBirst: this.info_user.dateOfBirst,
                 gender: this.info_user.gender,
                 adress: this.info_user.adress,
+                the_password: this.info_password.the_password,
             }
 
             await userApi.postInfoUser(info_user, param)

@@ -17,13 +17,11 @@
                     <nuxt-link to="/register/" class="login-register_link">{{ $t('login.account') }}</nuxt-link>
                 </div>
                 <div class="login-userName">
-                    <div v-if="errorEmail" class="error-message">{{ errorEmail }}</div>
                     <b-form-group id="login-label" :label="$t('login.userName')" label-for="input-1">
                         <b-form-input type="email" id="input-1" v-model="userLogin.user_email"></b-form-input>
                     </b-form-group>
                 </div>
                 <div class="login-userPasswork">
-                    <div v-if="errorPassword" class="error-password">{{ errorPassword }}</div>
                     <b-form-group id="login-label" :label="$t('login.userPassword')" label-for="input-1">
                         <b-form-input :type="isPasswordVisible ? 'text' : 'password'" id="input-1" v-model="userLogin.user_passwork"></b-form-input>
                         <img src="@/assets/img/mat.svg" alt="error-icon" id="icon-mat" @click="isShowType()">
@@ -75,9 +73,6 @@ export default {
             isPasswordVisible: false,
             isLoading: false,
             user_name: '',
-            errorEmail: '',
-            errorPassword: '',
-            errorMessage: null,
         }
     },
     methods: {
@@ -92,10 +87,6 @@ export default {
                 this.$router.push("/");
                 this.showToast('success', 'Đăng nhập thành công!');
             } catch (error) {
-                if (error.response && error.response.data && error.response.data.email || error.response.data.password) {
-                    this.errorEmail = error.response.data.email;
-                    this.errorPassword = error.response.data.password;
-                }
                 this.showToast('info', 'Thông tin không hợp lệ!');
             }
         },
@@ -239,22 +230,5 @@ export default {
 input {
     border: 1px solid $border;
 }
-.login-userName {
-    position: relative;
-}
-.login-userPasswork {
-    position: relative;
-}
-.error-message {
-    position: absolute;
-    top: 2px;
-    right: 0;
-    color: #FE616B;
-}
-.error-password{
-    position: absolute;
-    top: 2px;
-    right: 0;
-    color: #FE616B;
-}
+
 </style>
