@@ -24,6 +24,7 @@ class LoginController extends Controller
     {
         try {
             $credentials = $request->only('email', 'password');
+            Log::alert(Auth::attempt($credentials));
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
                 $request->session()->put('user', $user);
@@ -39,15 +40,20 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         try {
-            $user = new User();
-            $user->name = $request->user_name;
-            $user->email = $request->user_email;
-            $user->password = bcrypt($request->password);
-            $user->email_verified_at = now();
-            $user->remember_token = Str::uuid();
-            $user->user_id = Str::uuid();
+            // $user = new User();
+            // $user->name = $request->user_name;
+            // $user->email = $request->user_email;
+            // $user->password = bcrypt($request->password);
+            // $user->email_verified_at = now();
+            // $user->remember_token = Str::uuid();
+            // $user->user_id = Str::uuid();
 
-            $user->save();
+            // $user->save();
+            $user = User::create([
+                'name' => $request->user_name,
+                'email' => $request->user_email,
+                'password' => bcrypt($request->password),
+            ]);
 
             if (!$user) {
                 return response()->json(['error' => 'Đăng ký thất bại'], 500);
