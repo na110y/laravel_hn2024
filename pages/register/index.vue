@@ -60,6 +60,8 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import userApi from '~/plugins/api/userApi';
+
 export default {
     components: {
         Loading
@@ -79,9 +81,6 @@ export default {
             isLoading: false,
         }
     },
-    mounted() {
-        this.$axios.$get('/sanctum/csrf-cookie');
-    },
     methods: {
         async onSubmit() {
             try {
@@ -92,26 +91,23 @@ export default {
                     check_password: this.userRegister.check_password,
                 }
 
-                await this.$axios.post('http://localhost:8000/api/register', param).then(res => {
-                    this.$auth.loginWith('laravelSanctum', {
-                    data: {
-                        email: this.userRegister.user_email,
-                        password: this.userRegister.user_password
-                    }
-                    });
-                this.$router.push("/");
-                });
-                // const response = await this.$axios.post('http://localhost:8000/api/register', param);
-                // if (response.data.token) {
-                //     this.$auth.setToken('laravelSanctum', response.data.token);
-                //     await this.$auth.fetchUser();
-                //     this.$router.push("/");
-                //     this.showToast('success', 'Đăng ký thành công!');
-                // } else {
-                //     this.showToast('error', 'Đăng ký thất bại');
-                // }
+                userApi.postInfoLogin(param)
+                .then(() => {
+                    // this.$auth.loginWith('laravelSanctum', {
+                    //     data: {
+                    //         email: this.userRegister.user_email,
+                    //         password: this.userRegister.user_password
+                    //     }
+                    // });
 
-                this.showToast('success', 'Đăng ký thành công!');
+                    this.showToast('success', 'Đăng ký thành công!');
+                    this.$router.push("/login");
+                    this.is_loading = false;
+                })
+                .catch((err) => {
+                    this.showToast('error', 'Đăng ký thất bại!');
+                    this.is_loading = false;
+                });
             } catch (error) {
                 console.log(error);
                 this.showToast('info', 'Đã xảy ra lỗi trong quá trình đăng ký');

@@ -5,7 +5,25 @@
         "login": "Đăng nhập",
         "logout": "Đăng xuất",
         "profile": "Hồ sơ"
-  
+    },
+    "profile" : {
+        "total": "TỔNG TIỀN ĐÃ NẠP",
+        "money": "TIỀN HIỆN CÓ",
+        "infoUser": "Thông tin người dùng",
+        "fullName": "Họ và tên",
+        "sdt": "Số điện thoại",
+        "dateOfBirst": "Ngày sinh",
+        "gender": "Giới tính",
+        "adrres": "Địa chỉ",
+        "pw": "Mật khẩu:",
+        "ChangePassword": "Đổi mật khẩu",
+        "Currentpassword": "Mật khẩu hiện tại",
+        "PWToChange": "Mật khẩu mới",
+        "Update": "Cập nhập",
+        "Male": "Nam",
+        "Female": "Nữ",
+        "Other": "Khác",
+        "lang": "Ngôn ngữ"
     },
     "header": {
         "home": "Trang chủ",

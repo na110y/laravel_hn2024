@@ -6,6 +6,25 @@
       "logout": "Log out",
       "profile": "Profile"
     },
+    "profile" : {
+        "total": "TOTAL MONEY DEPOSIT",
+        "money": "CURRENT MONEY",
+        "infoUser": "User information",
+        "fullName": "FullName",
+        "sdt": "Phone number",
+        "dateOfBirst": "Date of birth",
+        "gender": "Gender",
+        "adrres": "Adrres",
+        "pw": "Password:",
+        "ChangePassword": "Change Password",
+        "Currentpassword": "Current password",
+        "PWToChange": "Password wants to change",
+        "Update": "Update",
+        "Male": "Male",
+        "Female": "Female",
+        "Other": "Other",
+        "lang": "Language"
+    },
     "header": {
         "home": "Home",
         "product": "Product",

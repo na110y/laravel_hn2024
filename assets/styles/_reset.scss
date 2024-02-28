@@ -52,3 +52,7 @@ select {
 button {
   cursor: pointer;
 }
+
+input {
+  border: 1px solid $border-input;
+}

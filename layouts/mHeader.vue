@@ -65,24 +65,6 @@
                </div>
                 <div class="modal_info" v-show="isShowInfoLogin">
                   <div class="modal_info-setting">
-                    <!-- <b-form-group
-                        id="input-group-1"
-                        label-for="search-available"
-                        class="mt-2"
-                      >
-                        <b-form-select
-                          v-model="$i18n.locale"
-                          @change="changeLanguage"
-                          id="lang"
-                        >
-                          <option v-for="(item, index) in options" 
-                            :value="item.value" 
-                            :key="index">
-                              {{ item.text  }}
-                          </option>
-                        </b-form-select>
-                    </b-form-group> -->
-
                     <div class="btn_info"> 
                       <nuxt-link to="/profile">
                         <b-button type="button" class="btn_info-profile">{{ $t('common.profile') }}</b-button>
@@ -129,10 +111,6 @@ export default {
     return {
       toastVariant: "info",
       toastMessage: null,
-      options: [
-          { value: 'vn', text: 'Tiếng Việt' },
-          { value: 'en', text: 'Tiếng Anh' },
-      ],
       isShowInfoLogin : false,
     };
   },
@@ -140,9 +118,6 @@ export default {
     window.addEventListener("click", this.handleClickOutside);
   },
   methods: {
-    changeLanguage(locale) {
-      this.$store.dispatch('changeLanguage', locale)
-    },
     info_login() {
       this.isShowInfoLogin = !this.isShowInfoLogin;
     },
