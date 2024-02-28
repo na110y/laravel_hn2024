@@ -18,7 +18,7 @@ class ProductController extends Controller
                 'product_ao.*'
             ])
             ->get();
-            return response()->json(['product' => $product]);
+            return $product;
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([
