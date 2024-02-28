@@ -28,28 +28,16 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(),
-            [
-                'email' => 'required|string|min:2|email',
-                'password' => 'required',
-            ],
-            [
-                'email.required' => 'Vui lòng nhập email',
-                'email.string' => 'Vui lòng nhập email dưới dạng chuỗi',
-                'email.email' => 'Vui lòng nhập đúng định dạng email',
-                'password.required' => 'Vui lòng nhập mật khẩu',
-            ]);
-            
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()], 400);
+            $credentials = $request->only('email', 'password');
+            $user_email = User::where('email', $credentials['email'])->first();
+            $user_password = User::where('password', $credentials['password'])->first();
+
+            if (!$user_email) {
+                return response()->json(['email' => 'Email không đúng!'], 500);
             }
 
-
-
-            $credentials = $request->only('email', 'password');
-            $user = User::where('email', $credentials['email'])->first();
-            if (!$user) {
-                return response()->json(['error' => 'Thông tin đăng nhập không hợp lệ'], 500);
+            if (!$user_password) {
+                return response()->json(['password' => 'Password không đúng!'], 500);
             }
 
             if (Auth::attempt($credentials)) {
@@ -69,10 +57,20 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->all(),
+            [
                 'user_name' => 'required|string|min:2',
                 'user_email' => 'required|email|unique:users,email',
                 'user_password' => 'required|string|min:6',
+            ],
+            [
+                'user_name.required' => 'tên người dùng không được để trống!',
+                'user_email.required' => 'Email không được để trống!',
+                'user_email.email' => 'Định dạng email không hợp lệ!',
+                'user_email.unique' => 'Email đã được sử dụng',
+                'user_password.required' => 'Password is required',
+                'user_password.string' => 'Password must be a string',
+                'user_password.min' => 'Password must be at least 6 characters',
             ]);
             
             if ($validator->fails()) {
