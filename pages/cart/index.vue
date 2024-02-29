@@ -7,7 +7,7 @@
         :is-full-page="true"
       ></loading>
 
-        <div class="content">
+        <div class="content" v-if="listProductCart.length > 0">
             <div class="cart">
                 <div class="cart-title"> Giỏ hàng của bạn </div>
                 <div class="cart-body" >
@@ -113,10 +113,24 @@
                     Đặt hàng 
                 </b-button>
             </div>
+
+            
+        </div>
+        <div class="productNull" v-else>
+            <div class="productNull-title">Không có sản phẩm nào trong giỏ hàng!</div>
         </div>
 
-
-
+        <b-toast
+            ref="customToast"
+            no-auto-hide
+            :variant="toastVariant"
+            class="my-custom-toast"
+            >
+            <template #toast-title>
+                <strong>Thông báo</strong>
+            </template>
+            <span class="my-custom-toast-message">{{ toastMessage }}</span>
+        </b-toast>
     </b-container>
 </template>
   
@@ -132,49 +146,49 @@
         Pagination
         },
         data() {
-        return {
-            isLoading: false,
-            toastVariant: "info",
-            toastMessage: null,
-            isShowCartTable: true,
-            isShowCartColumn: false,
-            fields: [
-                { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
-                { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
-                { key: "product_name", label: "Tên", sortable: false, thClass: 'text-center' },
-                { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
-                { key: "size", label: "Size", sortable: false, thClass: 'text-center'},
-                { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
-                { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
-                { key: "action", label: "Hành động", sortable: false, thClass: 'text-center' },
-            ],
-            listProductCart: [],
-            finalizedPproduct: {
-                product_code: '',
-                product_name: '',
-                note: '',
-                size: '',
-                product_price: '',
-                staff: '',
-            },
-            pagination: {
-                total_page: 0,
-                total: 0,
-                per_page: 8,
-                current_page: 1,
-            },
+            return {
+                isLoading: false,
+                toastVariant: "info",
+                toastMessage: null,
+                isShowCartTable: true,
+                isShowCartColumn: false,
+                fields: [
+                    { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
+                    { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
+                    { key: "product_name", label: "Tên", sortable: false, thClass: 'text-center' },
+                    { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
+                    { key: "size", label: "Size", sortable: false, thClass: 'text-center'},
+                    { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
+                    { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
+                    { key: "action", label: "Hành động", sortable: false, thClass: 'text-center' },
+                ],
+                listProductCart: [],
+                finalizedPproduct: {
+                    product_code: '',
+                    product_name: '',
+                    note: '',
+                    size: '',
+                    product_price: '',
+                    staff: '',
+                },
+                pagination: {
+                    total_page: 0,
+                    total: 0,
+                    per_page: 8,
+                    current_page: 1,
+                },
 
-            search:{
-                product_code: "",
-            },
-            selectPaymentMethod : [
-                { value: 1, text: 'Nhận hàng rồi thanh toán' },
-                { value: 2, text: 'Thanh toán thông qua ngân hàng' },
-            ],
-            selectedPayment: null,
+                search:{
+                    product_code: "",
+                },
+                selectPaymentMethod : [
+                    { value: 1, text: 'Nhận hàng rồi thanh toán' },
+                    { value: 2, text: 'Thanh toán thông qua ngân hàng' },
+                ],
+                selectedPayment: null,
 
 
-        }
+            }
         },
         created() {
             this.listUserItem();
@@ -189,14 +203,11 @@
             addProductCart() {
                 this.isLoading = true;
                 if (this.selectedPayment == null) {
-                    return alert('vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
+                    return this.showToast('info', 'vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
                 }
                 const params = {
                     listProduct : this.listProductCart,
                     selectedPayment: this.selectedPayment
-                }
-                if (!params.listProduct || params.listProduct.length === 0) {
-                    return alert('bạn chưa có sản phẩm nào trong giỏ hàng!'), this.isLoading = false; 
                 }
                 cartApi.postConfirms(params)
                 .then((res) => {
@@ -423,6 +434,17 @@
 
 #login-label{
     color: $text-color;
+}
+
+.productNull {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    &-title {
+        color: $bgc-icon;
+        font-size: 2rem;
+        font-weight: 550;
+    }
 }
 </style>
   

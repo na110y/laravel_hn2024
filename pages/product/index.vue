@@ -33,6 +33,18 @@
             </div>
           </div>
       </div>
+
+      <b-toast
+        ref="customToast"
+        no-auto-hide
+        :variant="toastVariant"
+        class="my-custom-toast"
+        >
+        <template #toast-title>
+            <strong>Thông báo</strong>
+        </template>
+        <span class="my-custom-toast-message">{{ toastMessage }}</span>
+      </b-toast>
     </b-container>
 </template>
   
