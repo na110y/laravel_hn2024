@@ -71,6 +71,7 @@ export default {
       await productApi.getListProduct()
         .then((res) => {
             this.listProduct = res.data;
+            this.isLoading = false;
         })
         .catch((err) => {
             this.isLoading = false;

@@ -85,6 +85,7 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import productApi from '~/plugins/api/listProduct';
+import cartApi from '~/plugins/api/listCart';
 
 export default {
     name: 'ProductDetail',
@@ -163,36 +164,29 @@ export default {
             this.itemSize.id = this.itemSize[index].id;
             this.selectedSizeIndex = index;
         },
+        
         /**
          * @description: thêm sản phẩm vào giỏ hàng
          */
-        addProductCart() {
+        async addProductCart() {
             this.isLoading = true;
-            if(this.itemSize.id === null) {
-                alert("vui lòng chọn kích cỡ!");
-                return ;
-            }
-            const params = {
+            const param = {
                 product_code: this.$route.params.id,
                 product_name: this.detailProduct.product_name,
                 size: this.itemSize.id,
                 note: this.detailProduct.note,
                 img: this.detailProduct.img,
-                fee: this.detailProduct.fee,
-            }
-            this.$axios
-            .post("http://127.0.0.1:8080/api/cart-api/user-buys-product", params)
-            .then((res) => {
-                if(res.data.status === 200) {
-                    this.isLoading = false;
+                fee: this.detailProduct.Fee,
+            };
+            await cartApi.productCart(param)
+                .then((res) => {
                     this.showToast("success", "Thêm thành công vào giỏ hàng!");
-                }
-            })
-            .catch((err) => {
-                this.isLoading = false;
-                alert(`Lỗi: ${err.message}`);
-            });
-        }
+                    this.isLoading = false;
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                });
+        },
     }
 }
 </script>
