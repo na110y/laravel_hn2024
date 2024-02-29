@@ -203,7 +203,7 @@ export default {
          * @description: Lưu thông tin thay đổi của người dùng
          */
          async saveInfoUser(info_user) {
-            this.is_loading = true;
+            this.isLoading = true;
             const param = {
                 fullName: this.info_user.fullName,
                 sdt: this.info_user.sdt,
@@ -216,11 +216,11 @@ export default {
             await userApi.postInfoUser(info_user, param)
             .then((res) => {
                 this.showToast('success', 'Cập nhập thành công!');
-                this.is_loading = false;
+                this.isLoading = false;
             })
             .catch((err) => {
                 this.showToast('error', 'Cập nhập thất bại!');
-                this.is_loading = false;
+                this.isLoading = false;
             });
         },
 
@@ -228,15 +228,15 @@ export default {
          * @description: lấy ra danh sách thông tin của người dùng
          */
          async listUserItem() {
-            this.is_loading = true;
+            this.isLoading = true;
             await userApi.getListUser()
             .then((res) => {
                 this.info_user = res.data.info_user;
                 this.listUser = res.data.info_user;
-                this.is_loading = false;
+                this.isLoading = false;
             })
             .catch((err) => {
-                this.is_loading = false;
+                this.isLoading = false;
             });
         },
         showToast(variant, message) {

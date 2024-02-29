@@ -15,7 +15,7 @@
               <b-form-group id="login-label" label="Lọc theo" label-for="search-available" class="mt-2">
                   <b-form-select v-model="$i18n.locale" id="lang">
                       <option :value="null" selected>Tất cả</option>
-                      <option v-for="(item, index) in productBody" :value="item.value" :key="index">
+                      <option v-for="(item, index) in productBody" :value="item.value" :key="index + 'text'">
                           {{ item.text  }}
                       </option>
                   </b-form-select>
@@ -24,12 +24,12 @@
           </div>
 
           <div class="product-body" >
-            <div class="info-product" v-for="items in listProduct" :key="items">
+            <div class="info-product" v-for="(items, index) in listProduct" :key="index + 'detail'">
               <img :src="items.img" alt="error" class="info-product_img">
               <div class="info-product_name">{{ items.name }}</div>
               <div class="info-product_fee">{{ items.fee }} VNĐ</div>
               <div class="info-product_detail">
-                <nuxt-link to="#" class="detail-txt">Xem chi tiết</nuxt-link>
+                <nuxt-link :to="`/product/${items.product_code}`" class="detail-txt">Xem chi tiết</nuxt-link>
               </div>
             </div>
           </div>
@@ -39,9 +39,14 @@
 </template>
 
 <script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 import productApi from '~/plugins/api/listProduct';
 export default {
   name: 'IndexPage',
+  components: {
+    Loading
+  },
   data() {
     return {
       listProduct : [],
@@ -61,15 +66,14 @@ export default {
     this.listUserItem();
   },
   methods: {
-
-
     async listUserItem() {
+      this.isLoading = true;
       await productApi.getListProduct()
         .then((res) => {
             this.listProduct = res.data;
         })
         .catch((err) => {
-            this.is_loading = false;
+            this.isLoading = false;
         });
     },
 

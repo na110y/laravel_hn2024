@@ -103,10 +103,10 @@ export default {
                         }
                     });
                     this.showToast('success', 'Đăng ký thành công!');
-                    this.is_loading = false;
+                    this.isLoading = false;
                 })
                 .catch((error) => {
-                    this.is_loading = false;
+                    this.isLoading = false;
                 });
             } catch (error) {
                 this.showToast('info', 'Đã xảy ra lỗi trong quá trình đăng ký');

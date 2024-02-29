@@ -13,6 +13,13 @@ const productApi = {
     });
   },
 
+  // lấy chi tiết sản phẩm
+  detailProduct(productCode) {
+    return productApi.setupCSRFCookie().then(() => {
+      return axios.get(`http://localhost:8000/api/product/get-detail-product/${productCode}` ,{ withCredentials: true });
+    });
+  },
+
   // lấy danh sách sản phẩm quần
   postInfoUser(param) {
     return productApi.setupCSRFCookie().then(() => {
