@@ -30,7 +30,7 @@ class UserCartController extends Controller
             }
 
             $productCart->orderBy('user_cart.id', 'DESC')->get();
-            $data = $productCart->paginate(10);
+            $data = $productCart->paginate(8);
 
             return $data;
 
