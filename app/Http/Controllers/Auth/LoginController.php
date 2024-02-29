@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\User\infoUser;
+use App\Models\UserCart\UserCart;
 use Carbon\Carbon;
 use Faker\Provider\Uuid;
 use Illuminate\Auth\AuthenticationException;
@@ -54,11 +55,21 @@ class LoginController extends Controller
                 'password' => bcrypt($request->user_password),
             ]);
             $user_info = infoUser::create([
-                'user_id' => (string) $user->user_id,
+                'user_id' => $user->user_id,
                 'name' => $request->user_name,
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 'staff' => $user->name,
             ]);
+
+            $user_info_cart = UserCart::create([
+                'user_id' => (string) $user->user_id,
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'staff' => $user->name,
+            ]);
+
+            if (!$user_info_cart) {
+                return response()->json(['error' => 'Tạo thông giỏ hàng của người dùng thất bại!'], 500);
+            }
 
             if (!$user_info) {
                 return response()->json(['error' => 'Tạo thông tin người dùng thất bại'], 500);

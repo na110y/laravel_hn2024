@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Models\Product;
+namespace App\Models\UserCart;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class product extends Model
+class UserCart extends Model
 {
     use HasFactory;
-    protected $table = 'product_ao';
+    protected $table = 'user_cart';
     protected $fillable = [
         "user_id",
         "product_code",
+        "product_name",
+        "product_price",
         "img",
-        "name",
-        "fee",
-        "sale",
+        "note",
+        "size",
+        "created_at",
+        "updated_at",
+        "staff",
     ];
     public $timestamps = true;
 

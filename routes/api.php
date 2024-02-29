@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\UserCar\UserCartController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -39,4 +40,10 @@ Route::prefix('info-user')->group(function () {
 Route::prefix('product')->group(function () {
     Route::get('/get-product', [ProductController::class, 'getProduct']);
     Route::get('/get-detail-product/{product_code}',[ProductController::class, 'getDetailProduct']);
+});
+
+Route::prefix('cart-api')->group(function () {
+    Route::get('/user-buys-product', [UserCartController::class, 'userBuysProduct']);
+    Route::post('/post-detail-product-cart',[UserCartController::class, 'postDetailProductCart']);
+    Route::get('/get-detail-product-cart/{product_code}',[UserCartController::class, 'getDetailProductCart']);
 });
