@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use App\Utils\ResponseBuilder;
 
 
 
@@ -16,15 +17,23 @@ class UserCartController extends Controller
 {
     
     // danh sách sản phẩm trong giỏ hàng
-    public function userBuysProduct()
+    public function userBuysProduct(Request $request)
     {
         try {
             $productCart = UserCart::query()
             ->select([
                 'user_cart.*'
-            ])
-            ->get();
-            return $productCart;
+            ]);
+            
+            if (isset($request->product_code) && $request->product_code) {
+                $productCart->where('user_cart.product_code', '=', $request->product_code);
+            }
+
+            $productCart->orderBy('user_cart.id', 'DESC')->get();
+            $data = $productCart->paginate(10);
+
+            return $data;
+
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([
