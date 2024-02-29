@@ -12,8 +12,15 @@
                 <div class="cart-title"> Giỏ hàng của bạn </div>
                 <div class="cart-body" >
                     <div class="btn-transform">
+                        <div class="search" v-show="isShowCartTable">
+                            <b-form-group>
+                                <b-form-input id="search-product" placeholder="Tìm kiếm theo từ khóa..." v-model="search.product_code" @keyup.enter="onClickSearch"></b-form-input>
+                            </b-form-group>
+                        </div>
                         <b-icon icon="justify" aria-hidden="true" v-show="isShowCartTable" scale="2" @click.prevent="btnJustify"></b-icon>
-                        <b-icon icon="grid" aria-hidden="true" v-show="isShowCartColumn" scale="2" @click.prevent="btnGrid"></b-icon>
+                    </div>
+                    <div class="btnShowGrid">
+                        <b-icon icon="grid" aria-hidden="true" v-show="isShowCartColumn" scale="2" @click.prevent="btnGrid" ></b-icon>
                     </div>
                     <b-card class="mt-3" v-show="isShowCartTable">
                         <b-row fluid sm="auto">
@@ -51,7 +58,7 @@
                                     <template #cell(action)="row" class="">
                                         <div class="action-table">
                                             <div class="btn-table">
-                                                <b-button variant="danger" class="btn-table_delete" size="sm" @click="deleteProductCart(row.item)">
+                                                <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(row.item)">
                                                     <b-icon icon="x-square" aria-hidden="true"></b-icon>
                                                     Xóa sản phẩm
                                                 </b-button>
@@ -71,15 +78,30 @@
                         </b-row>
                     </b-card>
                 </div>
+            </div>
+            <b-card class="mt-3" v-show="isShowCartTable">
+                <b-row class="mt-2">
+                    <b-col cols="12">
+                        <pagination
+                            :perPage="pagination.per_page"
+                            :total="pagination.total"
+                            @pagechanged="onPaginateChange"
+                            :totalPages="pagination.total_page"
+                            :currentPage="pagination.current_page"
+                        ></pagination>
+                    </b-col>
+                </b-row>
+            </b-card>
 
-
-                <div class="cart-btn">
-                    <b-button class="btnSubmit" variant="primary" @click="addProductCart()">
-                        Đặt hàng 
-                    </b-button>
-                </div>
+            <div class="cart-btn">
+                <b-button class="btnSubmit" variant="primary" @click="addProductCart()">
+                    Đặt hàng 
+                </b-button>
             </div>
         </div>
+
+
+
     </b-container>
 </template>
   
@@ -87,10 +109,12 @@
     import Loading from "vue-loading-overlay";
     import "vue-loading-overlay/dist/vue-loading.css";
     import cartApi from '~/plugins/api/listCart';
+    import Pagination from "@/components/paginate/index.vue";
     export default {
         name: 'ProductCart',
         components: {
-        Loading
+        Loading,
+        Pagination
         },
         data() {
         return {
@@ -117,24 +141,25 @@
                 size: '',
                 product_price: '',
                 staff: '',
-            }
+            },
+            pagination: {
+                total_page: 0,
+                total: 0,
+                per_page: 8,
+                current_page: 1,
+            },
+
+            search:{
+                product_code: "",
+            },
+
+
         }
         },
         created() {
             this.listUserItem();
         },
         methods: {
-            addProductCart() {
-                const param = {
-                    product_code : this.finalizedPproduct.product_code,
-                    product_name : this.finalizedPproduct.product_name,
-                    note : this.finalizedPproduct.note,
-                    size : this.finalizedPproduct.size,
-                    product_price : this.finalizedPproduct.product_price,
-                    staff : this.finalizedPproduct.staff,
-                }
-                console.log(param);
-            },
 
             btnJustify() {
                 this.isShowCartTable = !this.isShowCartTable;
@@ -146,20 +171,55 @@
                 this.isShowCartColumn = !this.isShowCartColumn;
             },
 
+            onClickSearch() {
+                this.pagination.current_page = 1;
+                this.listUserItem();
+            },
+
+            onPaginateChange(page) {
+                this.pagination.current_page = page;
+                this.listUserItem();
+            },
+            
+
             // lấy ra danh sách sản phẩm trong giỏ hàng
             async listUserItem() {
                 this.isLoading = true;
-                await cartApi.getListProduct()
-                .then((res) => {
-                    this.listProductCart = res.data;
-                    this.isLoading = false;
-                })
-                .catch((err) => {
-                    this.isLoading = false;
-                });
+                let params = {
+                    page: this.pagination.current_page,
+                    rows_per_page: this.pagination.per_page,
+                    product_code: this.search.product_code,
+                };
+
+                await cartApi.getListProduct(params)
+                    .then((res) => {
+                        this.listProductCart = res.data.data || [];
+                        this.isLoading = false;
+                        let url_from = new URL(res.data.first_page_url);
+                        let url_to = new URL(res.data.last_page_url);
+                        const total_page = parseInt(url_to.searchParams.get("page")) - parseInt(url_from.searchParams.get("page")) + 1;
+                        this.pagination = {
+                            path: res.data.path,
+                            total: res.data.total,
+                            current_page: res.data.current_page,
+                            per_page: parseInt(res.data.per_page),
+                            total_page: total_page,
+                        };
+
+                    })
+                    .catch((err) => {
+                        this.isLoading = false;
+                    });
             },
 
             // xóa sản phẩm trong giỏ hàng
+
+            btnDelete(item) {
+                if (confirm(`Bạn có chắc xóa sản phẩm có mã ID: ${item.id}`)) {
+                    this.deleteProductCart(item);
+                }
+
+            },
 
             async deleteProductCart(item) {
                 this.isLoading = true;
@@ -198,6 +258,11 @@
     width: 100%;
     margin: auto;
 }
+.btnShowGrid {
+    display: flex;
+    justify-content: end;
+    cursor: pointer;
+}
 
 .cart {
     &-title {
@@ -215,8 +280,14 @@
 
 .btn-transform {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+    align-items: center;
     cursor: pointer;
+}
+
+#search-product {
+    padding: 4px 8px;
+    width: 350px;
 }
 
 .action-table {

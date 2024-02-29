@@ -13,7 +13,7 @@
             <div class="product-first_title">Sản phẩm mới</div>
             <div class="product-first_select">
               <b-form-group id="login-label" label="Lọc theo" label-for="search-available" class="mt-2">
-                  <b-form-select v-model="$i18n.locale" id="lang">
+                  <b-form-select v-model="$i18n.locale" id="lang" @change="toggleSortOrder">
                       <option :value="null" selected>Tất cả</option>
                       <option v-for="(item, index) in productBody" :value="item.value" :key="index + 'text'">
                           {{ item.text  }}
@@ -57,15 +57,31 @@ export default {
       productBody: [
         { value: '1', text: 'Giá tăng dần' },
         { value: '2', text: 'Giá giảm dần' },
-      ]
-
+      ],
+      sortBy: null,
 
     }
+  },
+  watch: {
+    listProduct: 'sortProducts',
   },
   created() {
     this.listUserItem();
   },
   methods: {
+    toggleSortOrder() {
+      this.sortBy = this.sortBy === 'asc' ? 'desc' : 'asc';
+      this.sortProducts();
+    },
+
+    sortProducts() {
+      if (this.sortBy === 'asc') {
+        this.listProduct.sort((a, b) => a.fee - b.fee);
+      } else if (this.sortBy === 'desc') {
+        this.listProduct.sort((a, b) => b.fee - a.fee);
+      }
+    },
+
     async listUserItem() {
       this.isLoading = true;
       await productApi.getListProduct()
@@ -139,10 +155,14 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   gap: 30px;
+  margin-bottom: 50px;
 }
 .info-product {
-  border: 1px solid $border;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 320px;
+  height: 560px;
   border-radius: 20px;
   img {
     width: 100%;
@@ -154,14 +174,19 @@ export default {
     color: $text-color;
     font-size: 16px;
     font-weight: 550;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &_fee {
+    margin-top: auto;
     padding: 0 16px;
     color: $bgc-icon;
     font-size: 16px;
     font-weight: 550;
   }
   &_detail {
+    margin-top: auto;
     padding: 16px;
     color: $text-color;
     font-size: 16px;

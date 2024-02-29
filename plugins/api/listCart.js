@@ -7,9 +7,9 @@ const cartApi = {
   },
 
     // lấy danh sách người dùng mua quần áo
-  getListProduct() {
+  getListProduct(params) {
     return cartApi.setupCSRFCookie().then(() => {
-      return axios.get('http://localhost:8000/api/cart-api/user-buys-product', { withCredentials: true });
+      return axios.get('http://localhost:8000/api/cart-api/user-buys-product' ,{ params : params , withCredentials: true });
     });
   },
 
