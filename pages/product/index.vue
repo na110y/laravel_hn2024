@@ -12,7 +12,7 @@
               <div class="product-first_title">Sản phẩm mới</div>
               <div class="product-first_select">
                 <b-form-group id="login-label" label="Lọc theo" label-for="search-available" class="mt-2">
-                    <b-form-select v-model="$i18n.locale" id="lang" @change="toggleSortOrder">
+                    <b-form-select id="lang" @change="toggleSortOrder">
                         <option v-for="(item, index) in productBody" :value="item.value" :key="index + 'text'">
                             {{ item.text  }}
                         </option>

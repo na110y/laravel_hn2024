@@ -99,6 +99,15 @@
                 </b-row>
             </b-card>
 
+            <div class="selectPayments">
+                <b-form-group id="login-label" label="Chọn phương thức thanh toán" label-for="search-available" class="mt-2">
+                    <b-form-select v-model="selectedPayment" id="selectPayment" @change="selectPayment">
+                        <option v-for="(item, index) in selectPaymentMethod" :value="item.value" :key="index + 'text'">
+                            {{ item.text  }}
+                        </option>
+                    </b-form-select>
+                </b-form-group>
+            </div>
             <div class="cart-btn">
                 <b-button class="btnSubmit" variant="primary" @click="addProductCart">
                     Đặt hàng 
@@ -127,8 +136,8 @@
             isLoading: false,
             toastVariant: "info",
             toastMessage: null,
-            isShowCartTable: false,
-            isShowCartColumn: true,
+            isShowCartTable: true,
+            isShowCartColumn: false,
             fields: [
                 { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
                 { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
@@ -158,6 +167,11 @@
             search:{
                 product_code: "",
             },
+            selectPaymentMethod : [
+                { value: 1, text: 'Nhận hàng rồi thanh toán' },
+                { value: 2, text: 'Thanh toán thông qua ngân hàng' },
+            ],
+            selectedPayment: null,
 
 
         }
@@ -167,15 +181,27 @@
         },
         methods: {
 
+            // chọn phương thức thanh toán sản phẩm
+            selectPayment() {
+                this.selectedPayment
+            },
+
             addProductCart() {
                 this.isLoading = true;
+                if (this.selectedPayment == null) {
+                    return alert('vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
+                }
                 const params = {
                     listProduct : this.listProductCart,
+                    selectedPayment: this.selectedPayment
+                }
+                if (!params.listProduct || params.listProduct.length === 0) {
+                    return alert('bạn chưa có sản phẩm nào trong giỏ hàng!'), this.isLoading = false; 
                 }
                 cartApi.postConfirms(params)
                 .then((res) => {
                     this.isLoading = false;
-                    this.listUserItem();
+                    this.$router.push("/pending");
                 })
                 .catch((err) => {
                     this.isLoading = false;
@@ -384,7 +410,19 @@
         margin-top: auto;
     }
 }
+.selectPayments {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+}
+::v-deep #selectPayment {
+    width: 250px;
+    border: 1px solid $border;
+    padding: 0 8px;
+}
 
-
+#login-label{
+    color: $text-color;
+}
 </style>
   
