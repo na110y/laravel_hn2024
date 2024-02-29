@@ -4,6 +4,7 @@ namespace App\Http\Controllers\UserCar;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserCart\UserCart;
+use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class UserCartController extends Controller
         }
     }
 
-    // thêm sản phẩm của người dùng vào giỏ hàng để ship
+    // thêm sản phẩm của người dùng vào giỏ hàng
     public function postDetailProductCart(Request $request)
     {
         try {
@@ -77,6 +78,55 @@ class UserCartController extends Controller
         }
     }
 
+    // người dùng chốt sản phẩm và chuyển sang giao đoạn ship hàng
+    public function postConfirmsProduct(Request $request)
+    {
+        try {
+            $info_user = $request->session()->get('user');
+            $listData = [];
+            $list_Data = $request->listProduct;
+
+            foreach ($list_Data as $item) { 
+                $listData[] = [
+                    'user_id' => $item['user_id'],
+                    'product_code' => $item['product_code'],
+                    'product_name' => $item['product_name'],
+                    'product_price' => $item['product_price'],
+                    'img' => $item['img'],
+                    'note' => $item['note'],
+                    'size' => $item['size'],
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                    'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                    'staff' => $info_user->name,
+                ];
+            }
+            $user_info_cart = UserConfirmProductCart::insert($listData);
+
+            $user_id = array_column($listData, 'user_id');
+            $product_Code = array_column($listData, 'product_code');
+
+            $delete_cart = UserCart::whereIn('user_id', $user_id)
+                                ->whereIn('product_code', $product_Code)
+                                ->delete();
+
+            if (!$delete_cart) {
+                Log::error("postDetailProductCart" . "Thất bại!");
+                return 0;
+            }
+            if (!$user_info_cart) {
+                Log::error("postDetailProductCart" . "Thất bại!");
+                return 0;
+            }
+
+            return response()->json(['Thành công!'], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response([
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
+    }
 
     // xóa sản phẩm khỏi giỏ hàng
     public function getDeleteDetailProductCart(Request $request)
