@@ -23,15 +23,15 @@
                             </li>
                             <li class="list-item_note">
                                 <div> Sale: </div>
-                                <div class="product_note-txt">{{ detailProduct.Note }}</div>
+                                <div class="product_note-txt">{{ detailProduct.Note }} %</div>
                             </li>
                             <li class="list-item_fee">
                                 <div> Chỉ còn: </div>
-                                <div class="list-item_fee-fee">{{ detailProduct.Fee }} $</div>
+                                <div class="list-item_fee-fee">{{ $vali.formatCurrency(detailProduct.Fee) }}</div>
                             </li>
 
                             <li class="item-color">
-                                <div> Các kiểu màu: </div>
+                                <div> Thể loại: </div>
                                 <div class="item-color_name">{{ selected.currentColorName }}</div>
                             </li>
 
@@ -196,6 +196,9 @@ export default {
 
 .custom-style {
     display: flex;
+    max-width: 1440px;
+    width: 100%;
+    margin: auto;
 }
 .product-title {
     padding: 20px;

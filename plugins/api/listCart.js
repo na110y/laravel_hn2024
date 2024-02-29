@@ -9,7 +9,7 @@ const cartApi = {
     // lấy danh sách người dùng mua quần áo
   getListProduct() {
     return cartApi.setupCSRFCookie().then(() => {
-      return axios.get('http://127.0.0.1:8080/api/cart-api/user-buys-product', { withCredentials: true });
+      return axios.get('http://localhost:8000/api/cart-api/user-buys-product', { withCredentials: true });
     });
   },
 
@@ -24,6 +24,13 @@ const cartApi = {
   productCartDetail(productCode) {
     return cartApi.setupCSRFCookie().then(() => {
       return axios.get(`http://localhost:8000/api/cart-api/get-detail-product-cart/${productCode}` ,{ withCredentials: true });
+    });
+  },
+
+  // xóa sản phẩm khỏi giỏ hàng
+  productDeleteDetail(id) {
+    return cartApi.setupCSRFCookie().then(() => {
+      return axios.delete(`http://localhost:8000/api/cart-api/delete-detail-product-cart/${id}` ,{ withCredentials: true });
     });
   },
 

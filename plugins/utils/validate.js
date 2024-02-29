@@ -10,6 +10,16 @@ export default ({ app }, inject) => {
         } catch (err) {
         }
       },
+
+      // validation theo dạng tiền tệ
+      formatCurrency(amount) {
+        const formattedAmount = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(amount);
+
+        return formattedAmount;
+      },
       
       isType(string, language) {
         try {

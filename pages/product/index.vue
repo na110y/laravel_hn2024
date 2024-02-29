@@ -26,7 +26,7 @@
               <div class="info-product" v-for="(items, index) in listProduct" :key="index + 'detail'">
                 <img :src="items.img" alt="error" class="info-product_img">
                 <div class="info-product_name">{{ items.name }}</div>
-                <div class="info-product_fee">{{ items.fee }} VNĐ</div>
+                <div class="info-product_fee">{{ $vali.formatCurrency(items.fee) }}</div>
                 <div class="info-product_detail">
                   <nuxt-link :to="`/product/${items.product_code}`" class="detail-txt">Xem chi tiết</nuxt-link>
                 </div>
