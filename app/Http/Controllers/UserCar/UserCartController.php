@@ -85,6 +85,7 @@ class UserCartController extends Controller
             $info_user = $request->session()->get('user');
             $listData = [];
             $list_Data = $request->listProduct;
+            $selectedPayment = $request->selectedPayment;
 
             foreach ($list_Data as $item) { 
                 $listData[] = [
@@ -97,6 +98,7 @@ class UserCartController extends Controller
                     'size' => $item['size'],
                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                     'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                    'payment' => $selectedPayment,
                     'staff' => $info_user->name,
                 ];
             }

@@ -19,6 +19,7 @@ class UserConfirmProductCart extends Model
         "size",
         "created_at",
         "updated_at",
+        "payment",
         "staff",
     ];
     public $timestamps = true;
