@@ -142,8 +142,8 @@
     export default {
         name: 'ProductCart',
         components: {
-        Loading,
-        Pagination
+            Loading,
+            Pagination
         },
         data() {
             return {

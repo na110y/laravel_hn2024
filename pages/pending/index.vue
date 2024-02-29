@@ -48,19 +48,18 @@ export default {
             isLoading: false,
             toastVariant: "info",
             toastMessage: null,
-            listProductPending: [],
+            listProduct: [],
         }
     },
     created() {
-        this.listProductPending();
+        this.listPending();
     },
     methods: {
-
-        async listProductPending() {
+        listPending() {
             this.isLoading = true;
-            await pendingApi.listProductPending()
+            pendingApi.listProductPending()
             .then((res) => {
-                this.listProductPending = res.data;
+                this.listProduct = res.data;
                 this.isLoading = false;
             })
             .catch((err) => {
