@@ -21,7 +21,7 @@
               </div>
             </div>
   
-            <div class="product-body" >
+            <div class="product-body">
               <div class="info-product" v-for="(items, index) in listProduct" :key="index + 'detail'">
                 <img :src="items.img" alt="error" class="info-product_img">
                 <div class="info-product_name">{{ items.name }}</div>

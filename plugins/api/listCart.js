@@ -20,6 +20,13 @@ const cartApi = {
     });
   },
 
+  // người dùng chốt sản phẩm và chuyển sang giao đoạn chờ lấy hàng
+  postConfirms(params) {
+    return cartApi.setupCSRFCookie().then(() => {
+      return axios.post('http://localhost:8000/api/cart-api/post-confirms-product',params, { withCredentials: true });
+    });
+  },
+
   // chi tiết sản phẩm của người dùng mua hàng
   productCartDetail(productCode) {
     return cartApi.setupCSRFCookie().then(() => {

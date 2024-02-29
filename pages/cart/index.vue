@@ -70,16 +70,22 @@
                         </b-row>
                     </b-card>
 
-                    <b-card class="mt-3" v-show="isShowCartColumn">
-                        <b-row fluid sm="auto">
-                            <b-col>
-                                zxczxc
-                            </b-col>
-                        </b-row>
-                    </b-card>
+                    <div class="mt-3" v-show="isShowCartColumn">
+
+                        <div class="product-body">
+                            <div class="info-product" v-for="(items, index) in listProductCart" :key="index + 'product'">
+                                <img :src="items.img" alt="error" class="info-product_img">
+                                <div class="info-product_name">{{ items.product_name }}</div>
+                                <div class="info-product_fee">{{ $vali.formatCurrency(items.product_price) }}</div>
+                                <div class="info-product_detail">
+                                    <b-button class="btnDeleteCart" @click="btnDelete(items)">Xóa</b-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <b-card class="mt-3" v-show="isShowCartTable">
+            <b-card class="mt-3">
                 <b-row class="mt-2">
                     <b-col cols="12">
                         <pagination
@@ -94,7 +100,7 @@
             </b-card>
 
             <div class="cart-btn">
-                <b-button class="btnSubmit" variant="primary" @click="addProductCart()">
+                <b-button class="btnSubmit" variant="primary" @click="addProductCart">
                     Đặt hàng 
                 </b-button>
             </div>
@@ -121,8 +127,8 @@
             isLoading: false,
             toastVariant: "info",
             toastMessage: null,
-            isShowCartTable: true,
-            isShowCartColumn: false,
+            isShowCartTable: false,
+            isShowCartColumn: true,
             fields: [
                 { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
                 { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
@@ -160,6 +166,22 @@
             this.listUserItem();
         },
         methods: {
+
+            addProductCart() {
+                this.isLoading = true;
+                const params = {
+                    listProduct : this.listProductCart,
+                }
+                cartApi.postConfirms(params)
+                .then((res) => {
+                    this.isLoading = false;
+                    this.listUserItem();
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                    this.showToast('info', 'Thất bại!');
+                });
+            },
 
             btnJustify() {
                 this.isShowCartTable = !this.isShowCartTable;
@@ -317,5 +339,52 @@
         padding: 12px 24px;
     }
 }
+
+.product-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+  .info-product {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 320px;
+    height: 580px;
+    border-radius: 20px;
+    img {
+      width: 100%;
+      height: 420px;
+      border-radius: 20px;
+    }
+    &_name {
+      padding: 16px;
+      color: $text-color;
+      font-size: 16px;
+      font-weight: 550;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    &_fee {
+      margin-top: auto;
+      margin-bottom: 20px;
+      padding: 0 16px;
+      color: $bgc-icon;
+      font-size: 16px;
+      font-weight: 550;
+    }
+    &_detail {
+        padding: 0 16px;
+    }
+    .btnDeleteCart {
+        padding: 8px 20px;
+        width: 100%;
+        margin-top: auto;
+    }
+}
+
+
 </style>
   
