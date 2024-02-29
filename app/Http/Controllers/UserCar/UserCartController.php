@@ -14,6 +14,26 @@ use Illuminate\Support\Facades\Session;
 
 class UserCartController extends Controller
 {
+    
+    // danh sách sản phẩm trong giỏ hàng
+    public function userBuysProduct()
+    {
+        try {
+            $productCart = UserCart::query()
+            ->select([
+                'user_cart.*'
+            ])
+            ->get();
+            return $productCart;
+        } catch (\Throwable $th) {
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response([
+                'status' => 500,
+                'data' => []
+            ], 500);
+        }
+    }
+
     // thêm sản phẩm của người dùng vào giỏ hàng để ship
     public function postDetailProductCart(Request $request)
     {
@@ -47,4 +67,23 @@ class UserCartController extends Controller
             ], 500);
         }
     }
+
+
+    // xóa sản phẩm khỏi giỏ hàng
+    public function getDeleteDetailProductCart(Request $request)
+    {
+        try {
+            $deleteProductCart = UserCart::where('id',$request->id)->delete();
+            if (!$deleteProductCart) {
+                return response()->json(['Không tìm được sản phẩm cần xóa!'], 500);
+            }
+            return response()->json(['Xóa thành công!'], 200);
+        }catch (\Throwable $th) {
+            error_log($th);
+            Log::error('-------delete SV EBook-------');
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response(['error' => $th], 500);
+        }
+    }
+
 }

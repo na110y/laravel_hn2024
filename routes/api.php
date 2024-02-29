@@ -46,4 +46,5 @@ Route::prefix('cart-api')->group(function () {
     Route::get('/user-buys-product', [UserCartController::class, 'userBuysProduct']);
     Route::post('/post-detail-product-cart',[UserCartController::class, 'postDetailProductCart']);
     Route::get('/get-detail-product-cart/{product_code}',[UserCartController::class, 'getDetailProductCart']);
+    Route::delete('/delete-detail-product-cart/{id}',[UserCartController::class, 'getDeleteDetailProductCart']);
 });
