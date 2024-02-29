@@ -5,16 +5,19 @@ namespace App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class product extends Model
+class branchProduct extends Model
 {
     use HasFactory;
-    protected $table = 'product_ao';
-    protected $fillable = [
-        "product_code",
-        "img",
-        "name",
-        "fee",
-        "sale",
+    protected $table = 'branch_product';
+    protected $fillabale = [
+        'id',
+        'productCode',
+        'productName',
+        'productPrice',
+        'Note',
+        'Img',
+        'Fee'
+
     ];
     public $timestamps = true;
 

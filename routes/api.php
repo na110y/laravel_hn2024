@@ -38,4 +38,5 @@ Route::prefix('info-user')->group(function () {
 
 Route::prefix('product')->group(function () {
     Route::get('/get-product', [ProductController::class, 'getProduct']);
+    Route::get('/get-detail-product/{product_code}',[ProductController::class, 'getDetailProduct']);
 });
