@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserConfirmProductCart extends Model
 {
     use HasFactory;
-    protected $table = 'user_confirms_product';
+    protected $table = 'product_pending';
     protected $fillable = [
         "user_id",
         "product_code",
