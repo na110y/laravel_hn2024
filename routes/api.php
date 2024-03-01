@@ -53,5 +53,5 @@ Route::prefix('cart-api')->group(function () {
 
 Route::prefix('product-pending')->group(function () {
     Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
-    Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'postProductNextStepPending']);
+    Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'handleCancelProduct']);
 });

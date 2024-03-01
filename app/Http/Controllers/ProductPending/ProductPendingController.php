@@ -44,14 +44,20 @@ class ProductPendingController extends Controller
     public function getProductPending(Request $request)
     {
         try {
-            $productCart = UserConfirmProductCart::query()
-            ->select([
-                'product_pending.*'
-            ])
-            ->orderBy('product_pending.id', 'DESC')->get();
+            $info_user = $request->session()->get('user');
+            $checkID = $info_user->user_id;
 
-            return $productCart;
-
+            if($checkID !== null) {
+                $productCart = UserConfirmProductCart::query()
+                ->select([
+                    'product_pending.*'
+                ])
+                ->orderBy('product_pending.id', 'DESC')->get();
+    
+                return $productCart;
+            }else {
+                return response()->json(['Không có gì!'], 500);
+            }
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([
@@ -61,5 +67,32 @@ class ProductPendingController extends Controller
         }
     }
 
+    // hủy đơn hàng 
+    public function handleCancelProduct(Request $request){
+        try{
+            $info_user = $request->session()->get('user');
+            $checkID = $info_user->user_id;
+
+            if($checkID !== null) {
+                $update = UserConfirmProductCart::where('id', $request->id)
+                ->where('user_id', $info_user->user_id)
+                ->update([
+                    'step' => 3,
+                    'status' => 3
+                ]);
+                if(!$update) {
+                    return response()->json(['Thất bại!'], 500);
+                }
+                return response()->json(['Thành công!'], 200);
+            }else {
+                return response()->json(['Không có gì!'], 500);
+            }
+            
+        } catch (\Throwable $th) {
+            Log::error("handleCancelProduct: " . $th->getLine() . ":" . $th->getMessage());
+            throw new \Exception($th->getMessage());
+            return 0;
+        }
+    }
 
 }

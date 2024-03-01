@@ -21,6 +21,7 @@ class UserConfirmProductCart extends Model
         "updated_at",
         "payment",
         "step",
+        "status",
         "staff",
     ];
     public $timestamps = true;
