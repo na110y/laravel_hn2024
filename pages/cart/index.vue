@@ -55,7 +55,7 @@
                                         <div class="float-right" style="color: #FE616B">{{ $vali.formatCurrency(row.item.product_price) }}</div>
                                     </template>
 
-                                    <template #cell(action)="row" class="">
+                                    <template #cell(action)="row">
                                         <div class="action-table">
                                             <div class="btn-table">
                                                 <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(row.item)">

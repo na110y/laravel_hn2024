@@ -49,6 +49,13 @@ export default {
             toastVariant: "info",
             toastMessage: null,
             listProduct: [],
+            step : [
+                { value: 0, stepName: 'Chờ xử lý' },
+                { value: 1, stepName: 'Chờ giao hàng' },
+                { value: 2, stepName: 'Hoàn thành' },
+                { value: 3, stepName: 'Đã hủy' },
+                { value: 4, stepName: 'Trả hàng && hoàn tiền' },
+            ]
         }
     },
     created() {
