@@ -181,6 +181,7 @@ export default {
             await cartApi.productCart(param)
                 .then((res) => {
                     this.showToast("success", "Thêm thành công vào giỏ hàng!");
+                    this.$store.dispatch("showNotification");
                     this.isLoading = false;
                 })
                 .catch((err) => {

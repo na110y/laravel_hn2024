@@ -50,6 +50,7 @@
               </li>
               <li>
                 <div class="menu-icon_notif">
+                  <div>{{ listProduct.length }}</div>
                   <img src="@/assets/img/notif.svg" alt="error-icon" id="icon">
                 </div>
               </li>
@@ -103,7 +104,7 @@
 </template>
   
 <script>
-
+import cartApi from '~/plugins/api/listCart';
 // import { mapState } from 'vuex';
 export default {
   middleware: ['auth'],
@@ -112,12 +113,28 @@ export default {
       toastVariant: "info",
       toastMessage: null,
       isShowInfoLogin : false,
+      listProduct: []
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
   },
+  created() {
+    this.listPending();
+  },
   methods: {
+    listPending() {
+        this.isLoading = true;
+        cartApi.getListProduct()
+        .then((res) => {
+            this.listProduct.length = res.data;
+            this.isLoading = false;
+        })
+        .catch((err) => {
+            this.isLoading = false;
+        });
+    },
+
     info_login() {
       this.isShowInfoLogin = !this.isShowInfoLogin;
     },
@@ -234,8 +251,12 @@ export default {
   cursor: pointer;
   a {
     color: $text-color;
+    font-weight: 550;
+    font-size: 16px;
     &.nuxt-link-active {
       color: $primary-color !important;
+      font-weight: 550;
+      font-size: 16px;
     }
   }
 }
