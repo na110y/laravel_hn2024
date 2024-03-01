@@ -1,26 +1,20 @@
 <?php
 
-namespace App\Models\UserConfirmProduct;
+namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserConfirmProductCart extends Model
+class ProductLogs extends Model
 {
     use HasFactory;
-    protected $table = 'product_pending';
+    protected $table = 'product_buys_logs';
     protected $fillable = [
-        "user_id",
-        "product_code",
         "product_name",
         "product_price",
-        "img",
-        "note",
-        "size",
         "created_at",
-        "updated_at",
-        "payment",
-        "step",
+        "action",
+        "stepName",
         "staff",
     ];
     public $timestamps = true;
@@ -30,3 +24,4 @@ class UserConfirmProductCart extends Model
         parent::__construct($attributes);
     }
 }
+

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\ProductPending\ProductPendingController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\UserCar\UserCartController;
 use App\Models\User;
@@ -48,4 +49,9 @@ Route::prefix('cart-api')->group(function () {
     Route::get('/get-detail-product-cart/{product_code}',[UserCartController::class, 'getDetailProductCart']);
     Route::delete('/delete-detail-product-cart/{id}',[UserCartController::class, 'getDeleteDetailProductCart']);
     Route::post('/post-confirms-product',[UserCartController::class, 'postConfirmsProduct']);
+});
+
+Route::prefix('product-pending')->group(function () {
+    Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
+    Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'postProductNextStepPending']);
 });

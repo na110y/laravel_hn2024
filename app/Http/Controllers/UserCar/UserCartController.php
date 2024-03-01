@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\UserCar;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product\ProductLogs;
+use App\Models\User\infoUser;
 use App\Models\UserCart\UserCart;
 use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
@@ -84,6 +86,7 @@ class UserCartController extends Controller
         try {
             $info_user = $request->session()->get('user');
             $listData = [];
+            $dataUserLogs = [];
             $list_Data = $request->listProduct;
             $selectedPayment = $request->selectedPayment;
 
@@ -99,17 +102,38 @@ class UserCartController extends Controller
                     'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                     'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                     'payment' => $selectedPayment,
+                    'step' => 0,
                     'staff' => $info_user->name,
                 ];
+
+                $dataUserLogs[] = [
+                    'product_name' => $item['product_name'],
+                    'product_price' => $item['product_price'],
+                    'action' => 'Xử lý dịch vụ',
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                    'stepName' => "Chờ xử lý",
+                    'staff' => $info_user->name,
+                ];
+
             }
             $user_info_cart = UserConfirmProductCart::insert($listData);
+
+            $new_log = ProductLogs::insert($dataUserLogs);
+
 
             $user_id = array_column($listData, 'user_id');
             $product_Code = array_column($listData, 'product_code');
 
             $delete_cart = UserCart::whereIn('user_id', $user_id)
-                                ->whereIn('product_code', $product_Code)
-                                ->delete();
+            ->whereIn('product_code', $product_Code)
+            ->delete();
+
+
+
+            if(!$new_log) {
+                Log::error("Tạo log thất bại.");
+                return 0;
+            } 
 
             if (!$delete_cart) {
                 Log::error("postDetailProductCart" . "Thất bại!");

@@ -5,23 +5,13 @@ namespace App\Models\UserConfirmProduct;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserConfirmProductCart extends Model
+class NextStepPending extends Model
 {
     use HasFactory;
-    protected $table = 'product_pending';
+    protected $table = 'next_step_pending';
     protected $fillable = [
-        "user_id",
-        "product_code",
-        "product_name",
-        "product_price",
-        "img",
-        "note",
-        "size",
-        "created_at",
-        "updated_at",
-        "payment",
         "step",
-        "staff",
+        "step_name",
     ];
     public $timestamps = true;
 
