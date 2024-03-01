@@ -49,6 +49,7 @@ class ProductPendingController extends Controller
 
             if($checkID !== null) {
                 $productCart = UserConfirmProductCart::query()
+                ->where('user_id', $checkID)
                 ->select([
                     'product_pending.*'
                 ])
@@ -75,7 +76,7 @@ class ProductPendingController extends Controller
 
             if($checkID !== null) {
                 $update = UserConfirmProductCart::where('id', $request->id)
-                ->where('user_id', $info_user->user_id)
+                ->where('user_id', $checkID)
                 ->update([
                     'step' => 3,
                     'status' => 3

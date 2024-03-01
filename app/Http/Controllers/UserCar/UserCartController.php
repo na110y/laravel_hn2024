@@ -26,7 +26,9 @@ class UserCartController extends Controller
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
             if ($checkID !== null) {
+
                 $productCart = UserCart::query()
+                ->where('user_id', $checkID)
                 ->select([
                     'user_cart.*'
                 ]);
@@ -134,8 +136,8 @@ class UserCartController extends Controller
 
                 }
 
-                $user_info_cart = UserConfirmProductCart::insert($listData);
-                $new_log = ProductLogs::insert($dataUserLogs);
+                $user_info_cart = UserConfirmProductCart::where('user_id', $checkID)->insert($listData);
+                $new_log = ProductLogs::where('user_id', $checkID)->insert($dataUserLogs);
 
                 $user_id = array_column($listData, 'user_id');
                 $product_Code = array_column($listData, 'product_code');
@@ -181,7 +183,8 @@ class UserCartController extends Controller
             $checkID = $info_user->user_id;
 
             if ($checkID !== null) {
-                $deleteProductCart = UserCart::where('id',$request->id)->delete();
+                $deleteProductCart = UserCart::where('id',$request->id)
+                ->where('user_id', $checkID)->delete();
                 if (!$deleteProductCart) {
                     return response()->json(['Không tìm được sản phẩm cần xóa!'], 500);
                 }
