@@ -40,11 +40,11 @@
                                     </template>
 
                                     <template #cell(note)="row">
-                                        <div class="text-center">{{ row.item.note }}</div>
+                                        <div class="text-center validationSale">{{ row.item.note }} %</div>
                                     </template>
 
                                     <template #cell(size)="row">
-                                        <div class="text-center">{{ row.item.size }}</div>
+                                        <div class="text-center">{{ sizeProduct(row.item.size) }}</div>
                                     </template>
 
                                     <template #cell(staff)="row">
@@ -188,6 +188,13 @@
                 ],
                 selectedPayment: null,
 
+                itemSize:[
+                    { id: 0, nameSize: 'S'},
+                    { id: 1, nameSize: 'M'},
+                    { id: 2, nameSize: 'L'},
+                    { id: 3, nameSize: 'XL'},
+                ],
+
 
             }
         },
@@ -310,7 +317,13 @@
                     this.$refs.customToast.hide();
                 }, 3000);
             },
-    
+
+            sizeProduct(size) {
+                if(size == 0) return "S";
+                else if(size == 1) return "M";
+                else if(size == 2) return "L";
+                else if(size == 3) return "XL";
+            },
         },
     }
 </script>
@@ -451,6 +464,10 @@
         font-size: 2rem;
         font-weight: 550;
     }
+}
+.validationSale{
+    color: $primary-color;
+    font-weight: 550;
 }
 </style>
   
