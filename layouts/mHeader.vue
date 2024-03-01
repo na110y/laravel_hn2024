@@ -50,8 +50,31 @@
               </li>
               <li>
                 <div class="menu-icon_notif">
-                  <div>{{ listProduct.length }}</div>
-                  <img src="@/assets/img/notif.svg" alt="error-icon" id="icon">
+                  <img src="@/assets/img/notif.svg" alt="error-icon" id="icon" @click="btnIsShowProductNoti">
+                  <div class="product-cart-mini" v-if="listProduct.length > 0"></div>
+                  <div v-else></div>
+
+                  <div class="modal-notif" v-if="isShowProductNoti">
+                   <ul>
+                      <li v-for="(sp, index) in listProduct" :key="index + 'sp'" class="itemNotif" @click="btnHideProductNoti">
+                        <nuxt-link to="/cart" >
+                          <div class="modal-notif_image">
+                              <img :src="sp.img" alt="error-icon" id="iconNotif">
+                            </div>
+                            <div class="modal-notif_info" >
+                              <div class="notif_info-name"> {{ sp.product_name }}</div>
+
+                              <div class="notif_info-action">
+                                <div class="notif_info-fee"> {{ $vali.formatCurrency(sp.product_price) }} </div>
+                                <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(sp.id)">
+                                    Xóa sản phẩm
+                                </b-button>
+                              </div>
+                            </div>
+                        </nuxt-link>
+                      </li>
+                   </ul>
+                  </div>
                 </div>
               </li>
               <li class="menu-icon_info">
@@ -105,6 +128,7 @@
   
 <script>
 import cartApi from '~/plugins/api/listCart';
+import { EventBus } from '~/plugins/event-bus.js';
 // import { mapState } from 'vuex';
 export default {
   middleware: ['auth'],
@@ -113,26 +137,38 @@ export default {
       toastVariant: "info",
       toastMessage: null,
       isShowInfoLogin : false,
-      listProduct: []
+      listProduct: [],
+      isShowProductNoti : false,
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
   },
   created() {
+    EventBus.$on('listProductChanged', () => {
+      this.listPending();
+    });
     this.listPending();
   },
   methods: {
-    listPending() {
+    async  listPending() {
         this.isLoading = true;
-        cartApi.getListProduct()
+        await  cartApi.getListProduct()
         .then((res) => {
-            this.listProduct.length = res.data;
+            this.listProduct = res.data.data;
             this.isLoading = false;
         })
         .catch((err) => {
             this.isLoading = false;
         });
+    },
+
+    btnHideProductNoti() {
+      this.isShowProductNoti = !this.isShowProductNoti;
+    },
+
+    btnIsShowProductNoti() {
+      this.isShowProductNoti = !this.isShowProductNoti;
     },
 
     info_login() {
@@ -144,7 +180,31 @@ export default {
     handleClickOutside(event) {
       if (!this.$el.contains(event.target)) {
         this.isShowInfoLogin = false;
+        this.isShowProductNoti = false;
       }
+    },
+
+    // xóa sản phẩm trong giỏ hàng
+    btnDelete(id) {
+      if (confirm(`Bạn có chắc xóa sản phẩm có mã ID: ${id}`)) {
+          this.deleteProductCart(id);
+      }
+
+    },
+
+    async deleteProductCart(id) {
+        this.isLoading = true;
+        await cartApi.productDeleteDetail(id)
+        .then((res) => {
+            this.isLoading = false;
+            this.listPending();
+            EventBus.$emit('listProductChanged', res.data);
+            this.showToast('success', 'Xóa sản phẩm thành công!');
+        })
+        .catch((err) => {
+            this.showToast('danger', 'Xóa sản phẩm thất bại!');
+            this.isLoading = false;
+        });
     },
 
     async logout() {
@@ -236,8 +296,8 @@ export default {
 }
 
 #icon {
-  width: 16px;
-  height: 16px;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 .menu-info_name {
@@ -330,5 +390,71 @@ export default {
   &_txt {
     color: $text-color;
   }
+}
+.menu-icon_notif{
+  position: relative;
+}
+.product-cart-mini{
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  padding: 4px;
+  border-radius: 50%;
+  background-color: $bgc-icon;
+  color: $bgc-body;
+  font-weight: 550;
+}
+
+.modal-notif {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 350px;
+  height: 400px;
+  border: 1px solid $border;
+  border-radius: 16px;
+  background-color: #fff;
+  z-index: 999;
+  overflow-y: auto;
+  #iconNotif {
+    width: 80px;
+    height: 100px;
+    border-radius: 16px;
+  }
+  .notif_info-name {
+    color: $text-color;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .notif_info-fee {
+    color: $primary-color;
+    font-weight: 550;
+  }
+  a {
+    display: flex;
+    gap: 16px;
+    padding: 8px 0;
+
+  }
+  .itemNotif{
+    padding: 16px;
+    border-radius: 16px;
+    &:hover {
+      background-color: $border;
+    }
+  }
+}
+.btn-table_delete{
+  padding: 4px 8px;
+}
+.notif_info-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.modal-notif_info {
+  width: 100%;
 }
 </style>

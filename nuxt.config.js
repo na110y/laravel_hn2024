@@ -24,7 +24,7 @@ export default {
     '~/plugins/api/userApi.js',
     '~/plugins/i18n.js',
     '~/plugins/utils/validate.js',
-    
+    '~/plugins/event-bus.js',
   ],
 
   components: true,

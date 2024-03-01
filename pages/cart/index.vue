@@ -139,6 +139,7 @@
     import "vue-loading-overlay/dist/vue-loading.css";
     import cartApi from '~/plugins/api/listCart';
     import Pagination from "@/components/paginate/index.vue";
+    import { EventBus } from '~/plugins/event-bus.js';
     export default {
         name: 'ProductCart',
         components: {
@@ -190,7 +191,11 @@
 
             }
         },
+        
         created() {
+            EventBus.$on('listProductChanged', () => {
+                this.listUserItem();
+            });
             this.listUserItem();
         },
         methods: {
@@ -283,10 +288,11 @@
             async deleteProductCart(item) {
                 this.isLoading = true;
                 const id = item.id;
-                await cartApi.productDeleteDetail(id)
+                const res = await cartApi.productDeleteDetail(id)
                 .then((res) => {
                     this.isLoading = false;
                     this.listUserItem();
+                    EventBus.$emit('listProductChanged', res.data);
                     this.showToast('success', 'Xóa sản phẩm thành công!');
                 })
                 .catch((err) => {

@@ -12,7 +12,7 @@
               <div class="product-first_title">Sản phẩm mới</div>
               <div class="product-first_select">
                 <b-form-group id="login-label" label="Lọc theo" label-for="search-available" class="mt-2">
-                    <b-form-select id="lang" @change="toggleSortOrder">
+                    <b-form-select v-model="$i18n.locale" id="lang" @change="toggleSortOrder">
                         <option v-for="(item, index) in productBody" :value="item.value" :key="index + 'text'">
                             {{ item.text  }}
                         </option>
@@ -65,9 +65,8 @@ import productApi from '~/plugins/api/listProduct';
         toastMessage: null,
         selectedProduct:null,
         productBody: [
-          { value: '0', text: 'Tất cả' },
-          { value: '1', text: 'Giá tăng dần' },
-          { value: '2', text: 'Giá giảm dần' },
+          { value: 1, text: 'Giá tăng dần' },
+          { value: 2, text: 'Giá giảm dần' },
         ],
         sortBy: 1,
       }
