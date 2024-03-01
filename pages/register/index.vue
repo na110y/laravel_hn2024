@@ -85,7 +85,7 @@ export default {
         async onSubmit() {
             try {
                 if (this.userRegister.user_password !== this.userRegister.check_password) {
-                    return this.showToast('info', 'Mật khẩu nhập lại không khớp!');
+                    return this.showToast('warning', 'Mật khẩu nhập lại không khớp!');
                 }
                 const param = {
                     user_name: this.userRegister.user_name,
@@ -109,7 +109,7 @@ export default {
                     this.isLoading = false;
                 });
             } catch (error) {
-                this.showToast('info', 'Đã xảy ra lỗi trong quá trình đăng ký');
+                this.showToast('warning', 'Đã xảy ra lỗi trong quá trình đăng ký');
             }
         },
 

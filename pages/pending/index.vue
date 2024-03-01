@@ -12,14 +12,12 @@
             <div class="content-pending">
                 <b-card no-body>
                     <b-tabs card>
-                        <b-tab title="Chờ xử lý" active>
-                            <b-card-text> 
-                                <div class="listProductPending">
+                        <b-tab v-for="(step, index) in list_step" :key="index" :title="step.stepName" @click="changeStep(step.step)">
+                            <div class="listProductPending">
                                     <b-card class="mt-3">
                                         <b-row fluid sm="auto">
                                             <b-col>
-                                                <b-table striped hover :items="listProduct" :fields="fields">
-
+                                                <b-table v-if="step.step == currentStep" striped hover :items="filteredList" :fields="fields">
                                                     <template #cell(id)="row">
                                                         <div class="text-center">{{ row.item.id }}</div>
                                                     </template>
@@ -47,25 +45,11 @@
                                                     <template #cell(product_price)="row" >
                                                         <div class="float-right" style="color: #FE616B">{{ $vali.formatCurrency(row.item.product_price) }}</div>
                                                     </template>
-
                                                 </b-table>
                                             </b-col>
                                         </b-row>
                                     </b-card>
                                 </div>
-                            </b-card-text>
-                        </b-tab>
-                        <b-tab title="Chờ giao hàng">
-                            <b-card-text b-card-text>Tab contents 2</b-card-text>
-                        </b-tab>
-                        <b-tab title="Hoàn thành">
-                            <b-card-text b-card-text>Tab contents 3</b-card-text>
-                        </b-tab>
-                        <b-tab title="Đã hủy">
-                            <b-card-text b-card-text>Tab contents 4</b-card-text>
-                        </b-tab>
-                        <b-tab title="Trả hàng && hoàn tiền">
-                            <b-card-text b-card-text>Tab contents 5</b-card-text>
                         </b-tab>
                     </b-tabs>
                 </b-card>
@@ -89,12 +73,12 @@ export default {
             toastVariant: "info",
             toastMessage: null,
             listProduct: [],
-            step : [
-                { value: 0, stepName: 'Chờ xử lý' },
-                { value: 1, stepName: 'Chờ giao hàng' },
-                { value: 2, stepName: 'Hoàn thành' },
-                { value: 3, stepName: 'Đã hủy' },
-                { value: 4, stepName: 'Trả hàng && hoàn tiền' },
+            list_step : [
+                { step: 0, stepName: 'Chờ xử lý' },
+                { step: 1, stepName: 'Chờ giao hàng' },
+                { step: 2, stepName: 'Hoàn thành' },
+                { step: 3, stepName: 'Đã hủy' },
+                { step: 4, stepName: 'Trả hàng && hoàn tiền' },
             ],
             fields: [
                 { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
@@ -105,13 +89,22 @@ export default {
                 { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
                 { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
             ],
+            currentStep: 0,
 
         }
     },
     created() {
         this.listPending();
     },
+    computed: {
+        filteredList() {
+            return this.listProduct.filter(item => item.step === this.currentStep);
+        },
+    },
     methods: {
+        changeStep(step) {
+            this.currentStep = step;
+        },
         listPending() {
             this.isLoading = true;
             pendingApi.listProductPending()

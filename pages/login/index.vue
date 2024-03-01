@@ -87,7 +87,7 @@ export default {
                 this.$router.push("/");
                 this.showToast('success', 'Đăng nhập thành công!');
             } catch (error) {
-                this.showToast('info', 'Thông tin không hợp lệ!');
+                this.showToast('warning', 'Thông tin không hợp lệ!');
             }
         },
         showToast(variant, message) {

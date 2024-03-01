@@ -203,7 +203,7 @@
             addProductCart() {
                 this.isLoading = true;
                 if (this.selectedPayment == null) {
-                    return this.showToast('info', 'vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
+                    return this.showToast('warning', 'vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
                 }
                 const params = {
                     listProduct : this.listProductCart,
@@ -216,7 +216,7 @@
                 })
                 .catch((err) => {
                     this.isLoading = false;
-                    this.showToast('info', 'Thất bại!');
+                    this.showToast('danger', 'Thất bại!');
                 });
             },
 
@@ -290,7 +290,7 @@
                     this.showToast('success', 'Xóa sản phẩm thành công!');
                 })
                 .catch((err) => {
-                    this.showToast('info', 'Xóa sản phẩm thất bại!');
+                    this.showToast('danger', 'Xóa sản phẩm thất bại!');
                     this.isLoading = false;
                 });
             },
