@@ -25,7 +25,7 @@
                     <b-card class="mt-3" v-show="isShowCartTable">
                         <b-row fluid sm="auto">
                             <b-col>
-                                <b-table striped hover :items="listProductCart" :fields="fields" id="list-items-ebook">
+                                <b-table striped hover :items="listProductCart" :fields="fields">
 
                                     <template #cell(id)="row">
                                         <div class="text-center">{{ row.item.id }}</div>

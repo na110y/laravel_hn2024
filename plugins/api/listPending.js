@@ -7,10 +7,10 @@ const pendingApi = {
   },
 
     // lấy danh sản phẩm đang chờ xử lý
-    listProductPending() {
-        return pendingApi.setupCSRFCookie().then(() => {
-            return axios.get('http://localhost:8000/api/cart-api/user-buys-product' ,{ withCredentials: true });
-        });
+  listProductPending() {
+    return pendingApi.setupCSRFCookie().then(() => {
+        return axios.get('http://localhost:8000/api/product-pending/get-product-pending' ,{ withCredentials: true });
+    });
   },
 
 };

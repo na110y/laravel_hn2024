@@ -13,7 +13,47 @@
                 <b-card no-body>
                     <b-tabs card>
                         <b-tab title="Chờ xử lý" active>
-                            <b-card-text>Tab contents 1</b-card-text>
+                            <b-card-text> 
+                                <div class="listProductPending">
+                                    <b-card class="mt-3">
+                                        <b-row fluid sm="auto">
+                                            <b-col>
+                                                <b-table striped hover :items="listProduct" :fields="fields">
+
+                                                    <template #cell(id)="row">
+                                                        <div class="text-center">{{ row.item.id }}</div>
+                                                    </template>
+
+                                                    <template #cell(product_code)="row">
+                                                        <div class="text-center">{{ row.item.product_code }}</div>
+                                                    </template>
+
+                                                    <template #cell(product_name)="row">
+                                                        <div class="text-center">{{ row.item.product_name }}</div>
+                                                    </template>
+
+                                                    <template #cell(note)="row">
+                                                        <div class="text-center">{{ row.item.note }}</div>
+                                                    </template>
+
+                                                    <template #cell(size)="row">
+                                                        <div class="text-center">{{ row.item.size }}</div>
+                                                    </template>
+
+                                                    <template #cell(staff)="row">
+                                                        <div class="text-center">{{ row.item.staff }}</div>
+                                                    </template>
+
+                                                    <template #cell(product_price)="row" >
+                                                        <div class="float-right" style="color: #FE616B">{{ $vali.formatCurrency(row.item.product_price) }}</div>
+                                                    </template>
+
+                                                </b-table>
+                                            </b-col>
+                                        </b-row>
+                                    </b-card>
+                                </div>
+                            </b-card-text>
                         </b-tab>
                         <b-tab title="Chờ giao hàng">
                             <b-card-text b-card-text>Tab contents 2</b-card-text>
@@ -55,7 +95,17 @@ export default {
                 { value: 2, stepName: 'Hoàn thành' },
                 { value: 3, stepName: 'Đã hủy' },
                 { value: 4, stepName: 'Trả hàng && hoàn tiền' },
-            ]
+            ],
+            fields: [
+                { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
+                { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
+                { key: "product_name", label: "Tên", sortable: false, thClass: 'text-center' },
+                { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
+                { key: "size", label: "Size", sortable: false, thClass: 'text-center'},
+                { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
+                { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
+            ],
+
         }
     },
     created() {
@@ -120,5 +170,8 @@ export default {
   ::v-deep .card-header-tabs {
     display: flex;
     justify-content: center;
+  }
+  .listProductPending {
+    padding: 16px;
   }
 </style>
