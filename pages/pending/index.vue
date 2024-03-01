@@ -9,7 +9,7 @@
 
         <div class="content">
             <div class="content-title">Thông tin đơn hàng</div>
-            <div class="content-pending">
+            <div class="content-pending" v-if="listProduct.length > 0">
                 <b-card no-body>
                     <b-tabs card>
                         <b-tab v-for="(step, index) in list_step" :key="index" :title="step.stepName" @click="changeStep(step.step)">
@@ -38,12 +38,30 @@
                                                         <div class="text-center">{{ row.item.size }}</div>
                                                     </template>
 
+                                                    <template #cell(status)="row">
+                                                        <div class="text-center">
+                                                            <b :class="variantStatus(row.item.status)" >
+                                                                {{ statusName(row.item.status) }}
+                                                            </b>
+                                                        </div>
+                                                    </template>
+                                                    
                                                     <template #cell(staff)="row">
                                                         <div class="text-center">{{ row.item.staff }}</div>
                                                     </template>
 
                                                     <template #cell(product_price)="row" >
                                                         <div class="float-right" style="color: #FE616B">{{ $vali.formatCurrency(row.item.product_price) }}</div>
+                                                    </template>
+
+                                                    <template #cell(action)="row" v-if="step.step === 1">
+                                                        <div class="text-center">
+                                                            <div class="btn-table">
+                                                                <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnCancelProduct(row.item)">
+                                                                    Hủy đơn
+                                                                </b-button>
+                                                            </div>
+                                                        </div>
                                                     </template>
                                                 </b-table>
                                             </b-col>
@@ -54,7 +72,21 @@
                     </b-tabs>
                 </b-card>
             </div>
+
+            <div v-else class="content-text">Chưa có đơn hàng nào được xử lý!</div>
         </div>
+
+        <b-toast
+            ref="customToast"
+            no-auto-hide
+            :variant="toastVariant"
+            class="my-custom-toast"
+        >
+            <template #toast-title>
+                <strong>Thông báo</strong>
+            </template>
+            <span class="my-custom-toast-message">{{ toastMessage }}</span>
+        </b-toast>
         
     </b-container>
 </template>
@@ -87,7 +119,9 @@ export default {
                 { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
                 { key: "size", label: "Size", sortable: false, thClass: 'text-center'},
                 { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
+                { key: "status", label: "Trạng thái", sortable: false, thClass: 'text-center'},
                 { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
+                { key: "action", label: "Hủy đơn", sortable: false, thClass: 'text-center' },
             ],
             currentStep: 0,
 
@@ -117,6 +151,25 @@ export default {
             });
         },
 
+        /**
+         * @description: hủy đơn hàng
+         */
+        btnCancelProduct(item) {
+            this.isLoading = true;
+            const param = {
+                id: item.id
+            };
+            pendingApi.handleCancelProduct(param)
+                .then((res) => {
+                    this.listPending();
+                    this.isLoading = false;
+                    this.showToast("success", "Hủy đơn hàng thành công!");
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                });
+        },
+
 
         showToast(variant, message) {
             this.toastVariant = variant;
@@ -128,7 +181,32 @@ export default {
             }, 3000);
         },
 
-},
+        statusName(status) {
+            switch (status) {
+                case 0:
+                    return "Chờ xử lý";
+                case 1:
+                    return "Đang giao hàng";
+                case 2:
+                    return "Thành công";
+                case 3:
+                    return "Đã hủy";
+                case 100:
+                    return "Đã hoàn tiền";
+            }
+        },
+        variantStatus(status) {
+            if(status < 0) return "text-danger";
+            else if(status == 0) return "text-warning";
+            else if(status == 1) return "text-primary";
+            else if(status == 2) return "text-success";
+            else if(status == 3) return "text-danger";
+            else if(status == 100) return "text-success";
+        },
+
+
+
+    },
 }
 </script>
 
@@ -148,6 +226,14 @@ export default {
     &-pending {
         margin-top: 20px;
     }
+    &-text {
+        color: $bgc-icon;
+        font-weight: 550;
+        font-size: 20;
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
   }
 
   ::v-deep a {
@@ -166,5 +252,8 @@ export default {
   }
   .listProductPending {
     padding: 16px;
+  }
+  .btn-table_delete {
+    padding: 8px 12px;
   }
 </style>

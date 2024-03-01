@@ -184,6 +184,7 @@ export default {
                     this.isLoading = false;
                 })
                 .catch((err) => {
+                    this.showToast("warning", "Bạn chưa đăng nhập tài khoản!");
                     this.isLoading = false;
                 });
         },

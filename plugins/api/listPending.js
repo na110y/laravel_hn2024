@@ -13,6 +13,13 @@ const pendingApi = {
     });
   },
 
+  // người dùng hủy đơn hàng
+  handleCancelProduct(param) {
+    return pendingApi.setupCSRFCookie().then(() => {
+      return axios.post('http://localhost:8000/api/product-pending/post-product-nextStep-pending', param ,{ withCredentials: true });
+    });
+  },
+
 };
 
 export default pendingApi;
