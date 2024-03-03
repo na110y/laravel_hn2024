@@ -29,7 +29,7 @@
         "home": "Home",
         "product": "Product",
         "cart": "Cart",
-        "about": "About us"
+        "pending": "Order"
     },
     "login": {
         "title": "Log in",

@@ -31,8 +31,8 @@
               </li>
               <li>
                 <div class="menu-link">
-                  <nuxt-link to="/about">
-                    {{ $t('header.about') }}
+                  <nuxt-link to="/pending">
+                    {{ $t('header.pending') }}
                   </nuxt-link>
                 </div>
               </li>
@@ -102,13 +102,6 @@
                 </div>
               </li>
             </ul>
-            <b-modal id="modal-search" title="Tìm kiếm sản phẩm" hide-footer>
-              <b-form-group
-              >
-                <b-form-input id="search-product" placeholder="Tìm kiếm theo từ khóa..."></b-form-input>
-                <img src="@/assets/img/search.svg" alt="error-icon" id="icon-search">
-              </b-form-group>
-            </b-modal>
           </div>
         </div>
 

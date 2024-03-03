@@ -154,7 +154,7 @@
                 isShowCartTable: true,
                 isShowCartColumn: false,
                 fields: [
-                    { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
+                    // { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
                     { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
                     { key: "product_name", label: "Tên", sortable: false, thClass: 'text-center' },
                     { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
