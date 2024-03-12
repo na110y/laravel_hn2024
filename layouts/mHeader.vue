@@ -180,15 +180,16 @@ export default {
       channel.bind('message', data => {
       this.messages.push(data);
     });
+    if (this.$auth.user) {
+        this.username = this.$auth.user.name;
+        this.user_id = this.$auth.user.user_id;
+    }
   },
   created() {
     EventBus.$on('listProductChanged', () => {
       this.listPending();
     });
-    if (this.$auth.user) {
-        this.username = this.$auth.user.name;
-        this.user_id = this.$auth.user.user_id;
-    }
+
     this.listPending();
     this.listMessages();
   },
