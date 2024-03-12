@@ -173,12 +173,6 @@ export default {
       this.message = ''
 
     },
-    method1() {
-      this.socket.emit('method1', {
-        hello: 'world' 
-      }, (resp) => {
-      })
-    },
 
     async  listPending() {
         this.isLoading = true;
