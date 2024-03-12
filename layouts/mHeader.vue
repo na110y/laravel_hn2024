@@ -129,6 +129,7 @@
 <script>
 import cartApi from '~/plugins/api/listCart';
 import { EventBus } from '~/plugins/event-bus.js';
+import Pusher from 'pusher-js';
 // import { mapState } from 'vuex';
 export default {
   middleware: ['auth'],
@@ -139,15 +140,21 @@ export default {
       isShowInfoLogin : false,
       listProduct: [],
       isShowProductNoti : false,
+      username: "username",
+      message: []
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
 
-    const socket = io('http://localhost:3000');
-    socket.emit('chatMessage', 'Hello, server!');
-    socket.on('chatMessage', (message) => {
-      console.log('Server says:', message);
+    Pusher.logToConsole = true;
+    const pusher = new Pusher('0624ad209e23f1ff966f', {
+      cluster: 'eu'
+    });
+
+    const channel = pusher.subscribe('chat');
+      channel.bind('message', data => {
+      this.message.push(data);
     });
   },
   created() {
@@ -157,6 +164,15 @@ export default {
     this.listPending();
   },
   methods: {
+    async submit() {
+      await this.$axios.post('http://localhost:3000/api/messages', {
+        username: this.username,
+        message: this.message,
+      });
+
+      this.message = ''
+
+    },
     method1() {
       this.socket.emit('method1', {
         hello: 'world' 
