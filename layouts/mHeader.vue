@@ -185,18 +185,33 @@ export default {
       this.listPending();
     });
     this.listPending();
+    this.listMessages();
   },
   methods: {
     async submit() {
       await this.$axios.post('http://localhost:8080/api/messages', {
         username: this.username,
         message: this.message,
-      });
-      this.message = ''
+      })
+      .then((res) => {
+        this.message = '',
+        console.log(res);
+      })
+
     },
 
     btnIsShowMess() {
       this.isMessgers = !this.isMessgers
+    },
+
+    async listMessages() {
+      await this.$axios.get('http://localhost:8080/api/get-messages')
+        .then((response) => {
+          this.messages = response.data;
+        })
+        .catch((error) => {
+          console.error('Error fetching messages:', error);
+        });
     },
 
     async  listPending() {
