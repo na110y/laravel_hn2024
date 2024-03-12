@@ -144,12 +144,11 @@ export default {
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
 
-    this.socket = this.$nuxtSocket({
-      channel: '/index'
-    })
-    this.socket
-    .on('someEvent', (msg, cb) => {
-    })
+    const socket = io('http://localhost:3000');
+    socket.emit('chatMessage', 'Hello, server!');
+    socket.on('chatMessage', (message) => {
+      console.log('Server says:', message);
+    });
   },
   created() {
     EventBus.$on('listProductChanged', () => {
