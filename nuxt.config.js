@@ -25,6 +25,7 @@ export default {
     '~/plugins/i18n.js',
     '~/plugins/utils/validate.js',
     '~/plugins/event-bus.js',
+    '~/plugins/socket.client.js'
   ],
 
   components: true,
@@ -45,8 +46,18 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
+    'nuxt-socket-io',
     // 'cookie-universal-nuxt',
   ],
+  io: {
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:3000',
+      options: {
+        autoConnect: false,
+      },
+    }],
+  },
   auth:{
     strategies:{
       'laravelSanctum': {

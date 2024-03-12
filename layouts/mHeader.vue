@@ -143,6 +143,13 @@ export default {
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
+
+    this.socket = this.$nuxtSocket({
+      channel: '/index'
+    })
+    this.socket
+    .on('someEvent', (msg, cb) => {
+    })
   },
   created() {
     EventBus.$on('listProductChanged', () => {
@@ -151,6 +158,13 @@ export default {
     this.listPending();
   },
   methods: {
+    method1() {
+      this.socket.emit('method1', {
+        hello: 'world' 
+      }, (resp) => {
+      })
+    },
+
     async  listPending() {
         this.isLoading = true;
         await  cartApi.getListProduct()
