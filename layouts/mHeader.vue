@@ -51,7 +51,7 @@
                       <b-form @submit.prevent="submit" ref="messger">
                         <b-form-group id="login-label" label-for="input-1">
                             <div class="messger-header">
-                              <div class="messger-header_userName">Đức Thịnh</div>
+                              <div class="messger-header_userName">{{ username }}</div>
                               <img src="@/assets/img/close.svg" alt="image" @click="btnIsShowMess">
                             </div>
                             <div class="messger-content">
@@ -162,7 +162,8 @@ export default {
       listProduct: [],
       isShowProductNoti : false,
       isMessgers: false,
-      username: 'Đức Thịnh',
+      username: '',
+      user_id: '',
       messages: []
     };
   },
@@ -184,12 +185,17 @@ export default {
     EventBus.$on('listProductChanged', () => {
       this.listPending();
     });
+    if (this.$auth.user) {
+        this.username = this.$auth.user.name;
+        this.user_id = this.$auth.user.user_id;
+    }
     this.listPending();
     this.listMessages();
   },
   methods: {
     async submit() {
       await this.$axios.post('http://localhost:8080/api/messages', {
+        user_id: this.user_id,
         username: this.username,
         message: this.message,
       })
