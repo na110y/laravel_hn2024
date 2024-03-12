@@ -56,7 +56,7 @@
                             </div>
                             <div class="messger-content">
                              <div v-for="message in messages" :key="message">
-                              <div>{{ message.message }}</div>
+                              <div class="messger-content_text">{{ message.username }} : {{ message.message }}</div>
                             </div>
                             </div>
                             <div class="messger-submit">
@@ -363,8 +363,12 @@ export default {
     }
   }
   &-content {
-
+    padding: 16px;
     height: 340px;
+    &_text {
+      color: $text-color;
+
+    }
   }
   &-submit {
     position: relative;
