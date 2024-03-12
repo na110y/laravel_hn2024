@@ -28,6 +28,12 @@ const userApi = {
     });
   },
 
+  postMessger(param) {
+    return userApi.setupCSRFCookie().then(() => {
+      return axios.post('http://localhost:3000/api/messages', param, { withCredentials: true });
+    });
+  },
+
 };
 
 export default userApi;

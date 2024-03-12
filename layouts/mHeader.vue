@@ -45,7 +45,33 @@
               </li>
               <li>
                 <div class="menu-icon_mess">
-                  <img src="@/assets/img/mess.svg" alt="error-icon" id="icon">
+                  <img src="@/assets/img/mess.svg" alt="error-icon" id="icon" @click="btnIsShowMess">
+                  <div class="messger" v-if="isMessgers">
+                    <div class="messger_user">
+                      <b-form @submit.prevent="submit" ref="messger">
+                        <b-form-group id="login-label" label-for="input-1">
+                            <div class="messger-header">
+                              <div class="messger-header_userName">Đức Thịnh</div>
+                              <img src="@/assets/img/close.svg" alt="image" @click="btnIsShowMess">
+                            </div>
+                            <div class="messger-content">
+                             <div v-for="message in messages" :key="message">
+                              <div>{{ message.message }}</div>
+                            </div>
+                            </div>
+                            <div class="messger-submit">
+                              <div>
+                                <b-form-input type="text" id="inputMess" v-model="message" placeholder="Nhập tin nhắn..."></b-form-input>
+                              </div>
+                              <b-button class="login-submit" type="submit" id="submit-messgers"> 
+                                <img src="@/assets/img/send.svg" alt="image">
+                              </b-button>
+                              
+                            </div>
+                        </b-form-group>
+                      </b-form>
+                    </div>
+                  </div>
                 </div>
               </li>
               <li>
@@ -118,7 +144,9 @@
         </b-toast>
     </b-container>
 </template>
-  
+
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
 import cartApi from '~/plugins/api/listCart';
 import { EventBus } from '~/plugins/event-bus.js';
@@ -133,8 +161,9 @@ export default {
       isShowInfoLogin : false,
       listProduct: [],
       isShowProductNoti : false,
-      username: "username",
-      message: []
+      isMessgers: false,
+      username: 'Đức Thịnh',
+      messages: []
     };
   },
   mounted() {
@@ -142,12 +171,13 @@ export default {
 
     Pusher.logToConsole = true;
     const pusher = new Pusher('0624ad209e23f1ff966f', {
-      cluster: 'eu'
+      cluster: 'eu',
+      encrypted: true,
     });
 
     const channel = pusher.subscribe('chat');
       channel.bind('message', data => {
-      this.message.push(data);
+      this.messages.push(data);
     });
   },
   created() {
@@ -158,13 +188,15 @@ export default {
   },
   methods: {
     async submit() {
-      await this.$axios.post('http://localhost:3000/api/messages', {
+      await this.$axios.post('http://localhost:8080/api/messages', {
         username: this.username,
         message: this.message,
       });
-
       this.message = ''
+    },
 
+    btnIsShowMess() {
+      this.isMessgers = !this.isMessgers
     },
 
     async  listPending() {
@@ -302,6 +334,59 @@ export default {
       display: flex;
       align-items: center;
       gap: 0 8px;
+    }
+  }
+}
+
+.messger {
+  position: fixed;
+  bottom: 0;
+  right: calc((100% - 1440px) / 2);
+  width: 370px;
+  height: 488px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  background-color: $bgc-profile;
+  &-header {
+    display: flex;
+    border-radius: 16px 16px 0 0;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid $border;
+    padding: 16px;
+    background-color: $bgc-body;
+    &_userName {
+      color: $text-color;
+      font-size: 16px;
+      font-weight: 550;
+    }
+  }
+  &-content {
+
+    height: 340px;
+  }
+  &-submit {
+    position: relative;
+    border-radius: 16px;
+    padding: 16px;
+    #inputMess {
+      border: none;
+      border-radius: 16px;
+      padding: 10px;
+      height: 50px;
+      color: $text-color;
+      padding: 16px;
+      &::placeholder {
+        color: $text-color;
+      }
+    }
+    #submit-messgers {
+      position: absolute;
+      top: 30%;
+      right: 20px;
+      background-color: #fff;
+      padding-right: 10px;
     }
   }
 }
