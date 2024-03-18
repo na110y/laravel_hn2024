@@ -55,3 +55,7 @@ Route::prefix('product-pending')->group(function () {
     Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
     Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'handleCancelProduct']);
 });
+
+Route::prefix('export')->group(function () {
+    Route::get('/export-excel-registration', [ProductPendingController::class, 'exportExcel']);
+});

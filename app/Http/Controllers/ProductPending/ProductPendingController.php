@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ProductPending;
 
+use App\Exports\ExportProductExcel;
 use App\Http\Controllers\Controller;
 use App\Models\Product\ProductLogs;
 use App\Models\UserConfirmProduct\NextStepPending;
@@ -9,6 +10,7 @@ use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductPendingController extends Controller
 {
@@ -65,6 +67,25 @@ class ProductPendingController extends Controller
                 'status' => 500,
                 'data' => []
             ], 500);
+        }
+    }
+
+    /**
+     * tải xuống danh sách sản phẩm đang trong thời gian xử lý
+     *
+     * @param  mixed $request
+     * @return mixed
+     */
+    public function exportExcel(Request $request)
+    {
+        try {
+            $data = $this->getProductPending($request)->toArray();
+            $export = new ExportProductExcel($data);
+            return Excel::download($export, 'Danh-sach-cho-xu-ly.xlsx');
+        } catch (\Throwable $th) {
+            Log::error("exportExcel: " . $th->getLine() . ":" . $th->getMessage());
+            throw new \Exception($th->getMessage());
+            return 0;
         }
     }
 
