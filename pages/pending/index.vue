@@ -228,6 +228,14 @@ export default {
             window.open(href, "_blank");
         },
 
+        onClickPDF() {
+            let href = 'http://localhost:8000/api/export/export-pdf?';
+            for (const [key, value] of Object.entries(this.export.product_code, this.export.step)) {
+                href += `${key}=${value}&`;
+            }
+            window.open(href, "_blank");
+        },
+
     },
 }
 </script>
