@@ -8,7 +8,17 @@
         ></loading>
 
         <div class="content">
-            <div class="content-title">Thông tin đơn hàng</div>
+            <div class="content_head">
+                <div class="content-title">Thông tin đơn hàng</div>
+                <div class="content_head-excel">
+                    <b-button variant="primary" @click="onClickExport()">
+                        Export Excel
+                    </b-button>
+                    <b-button variant="primary" @click="onClickPDF()">
+                        Export PDF
+                    </b-button>
+                </div>
+            </div>
             <div class="content-pending" v-if="listProduct.length > 0">
                 <b-card no-body>
                     <b-tabs card>
@@ -124,6 +134,10 @@ export default {
                 { key: "action", label: "Hủy đơn", sortable: false, thClass: 'text-center' },
             ],
             currentStep: 0,
+            export: {
+                product_code: "",
+                step: null,
+            },
 
         }
     },
@@ -204,7 +218,13 @@ export default {
             else if(status == 100) return "text-success";
         },
 
-
+        onClickExport() {
+            let href = 'http://localhost:8000/api/export/export-excel-registration?';
+            for (const [key, value] of Object.entries(this.export.product_code, this.export.step)) {
+                href += `${key}=${value}&`;
+            }
+            window.open(href, "_blank");
+        },
 
     },
 }
@@ -217,6 +237,18 @@ export default {
     max-width: 1440px;
     width: 100%;
     margin: auto;
+    &_head {
+        display: flex;
+        justify-content: space-between;
+        &-excel {
+            display: flex;
+            gap: 0 16px;
+            align-items: center;   
+            button {
+                padding: 4px 8px;
+            }
+        }
+    }
     &-title {
         margin-top: 30px;
         color: $text-color;

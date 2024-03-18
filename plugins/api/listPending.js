@@ -13,6 +13,12 @@ const pendingApi = {
     });
   },
 
+  exportExcel() {
+    return pendingApi.setupCSRFCookie().then(() => {
+        return axios.get('http://localhost:8000/api/export/export-excel-registration?' ,{ withCredentials: true });
+    });
+  },
+
   // người dùng hủy đơn hàng
   handleCancelProduct(param) {
     return pendingApi.setupCSRFCookie().then(() => {
