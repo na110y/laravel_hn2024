@@ -13,9 +13,11 @@
                 <div class="content_head-excel">
                     <b-button variant="primary" @click="onClickExport()">
                         Export Excel
+                        <b-icon icon="cloud-plus" aria-hidden="true" scale="1" id="icon"></b-icon>
                     </b-button>
-                    <b-button variant="primary" @click="onClickPDF()">
+                    <b-button variant="success" @click="onClickPDF()">
                         Export PDF
+                        <b-icon icon="cloud-plus" aria-hidden="true" scale="1" id="icon"></b-icon>
                     </b-button>
                 </div>
             </div>
