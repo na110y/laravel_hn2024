@@ -58,4 +58,5 @@ Route::prefix('product-pending')->group(function () {
 
 Route::prefix('export')->group(function () {
     Route::get('/export-excel-registration', [ProductPendingController::class, 'exportExcel']);
+    Route::get('/export-pdf', [ProductPendingController::class, 'exportPdf']);
 });

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\ProductPending;
 
 use App\Exports\ExportProductExcel;
+use App\Exports\ExportProductPDF;
 use App\Http\Controllers\Controller;
 use App\Models\Product\ProductLogs;
 use App\Models\UserConfirmProduct\NextStepPending;
 use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use niklasravnsborg\LaravelPdf\Facades\Pdf as PDF2;
 
 class ProductPendingController extends Controller
 {
@@ -71,7 +74,7 @@ class ProductPendingController extends Controller
     }
 
     /**
-     * tải xuống danh sách sản phẩm đang trong thời gian xử lý
+     * tải xuống danh sách sản phẩm đang trong thời gian xử lý bằng file excel
      *
      * @param  mixed $request
      * @return mixed
@@ -87,6 +90,49 @@ class ProductPendingController extends Controller
             throw new \Exception($th->getMessage());
             return 0;
         }
+    }
+
+    /**
+     * tải xuống danh sách sản phẩm đang trong thời gian xử lý bằng PDF
+     *
+     * @param  mixed $request
+     */
+    public function exportPdf(Request $request)
+    {
+        try {
+            $info_user = $request->session()->get('user');
+            $checkID = $info_user->user_id;
+            $productCart = UserConfirmProductCart::query()
+                ->where('user_id', $checkID)
+                ->select([
+                    'product_pending.*'
+                ])
+                ->get();
+
+            $pdf = new PDF2(); 
+            foreach ($productCart as $product) {
+                $pdf = $this->PDFNormalConfirmForm($request, $pdf, $product);
+            }
+            $pdf->download('Danh-sach-cho-xu-ly.pdf');
+            return $pdf;
+        } catch (\Throwable $th) {
+            Log::error("exportExcel: " . $th->getLine() . ":" . $th->getMessage());
+            throw new \Exception($th->getMessage());
+            return 0;
+        }
+    }
+
+    public function PDFNormalConfirmForm(Request $request, $pdf, $product)
+    {
+        return $pdf = $pdf::loadView('pdf.product_code', [
+            'product_code' => $product->product_code,
+            'product_name' => $product->product_name,
+            'size' => $product->size,
+            'note' => $product->note,
+            'product_price' => $product->product_price,
+            'staff' => $request->staff,
+            'created_at' => $product->created_at,
+        ], [], []);
     }
 
     // hủy đơn hàng 
