@@ -11,6 +11,11 @@ export default ({ app }, inject) => {
         }
       },
 
+      // validation theo dạng ngày tháng năm
+      formatDate(datetime) {
+        return moment(datetime, "HH:mm:ss").format("HH:mm");
+      },
+
       // validation theo dạng tiền tệ
       formatCurrency(amount) {
         const formattedAmount = new Intl.NumberFormat('vi-VN', {

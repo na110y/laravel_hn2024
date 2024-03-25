@@ -84,19 +84,17 @@
                    <ul>
                       <li v-for="(sp, index) in listProduct" :key="index + 'sp'" class="itemNotif" @click="btnHideProductNoti">
                         <nuxt-link to="/cart" >
-                          <div class="modal-notif_image">
-                              <img :src="sp.img" alt="error-icon" id="iconNotif">
-                            </div>
-                            <div class="modal-notif_info" >
-                              <div class="notif_info-name"> {{ sp.product_name }}</div>
+                          <div class="modal-notif_image">{{ username }}</div>
+                          <div class="modal-notif_info" >
+                            <div class="notif_info-name">{{ sp.product_name }} - {{ $vali.formatDate(sp.created_at) }} </div>
 
-                              <div class="notif_info-action">
-                                <div class="notif_info-fee"> {{ $vali.formatCurrency(sp.product_price) }} </div>
-                                <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(sp.id)">
-                                    Xóa sản phẩm
-                                </b-button>
-                              </div>
-                            </div>
+                            <!-- <div class="notif_info-action">
+                              <div class="notif_info-fee"> {{ $vali.formatCurrency(sp.product_price) }} </div>
+                              <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(sp.id)">
+                                  Xóa sản phẩm
+                              </b-button>
+                            </div> -->
+                          </div>
                         </nuxt-link>
                       </li>
                    </ul>
@@ -583,5 +581,9 @@ export default {
 }
 .modal-notif_info {
   width: 100%;
+}
+.modal-notif_image {
+  color: $text-color;
+  font-weight: bold;
 }
 </style>
