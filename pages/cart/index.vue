@@ -286,7 +286,7 @@
             // xóa sản phẩm trong giỏ hàng
 
             btnDelete(item) {
-                if (confirm(`Bạn có chắc xóa sản phẩm có mã ID: ${item.id}`)) {
+                if (confirm(`Bạn có chắc xóa sản phẩm : ${item.product_name}`)) {
                     this.deleteProductCart(item);
                 }
 

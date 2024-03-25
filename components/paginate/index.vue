@@ -1,7 +1,7 @@
 <template>
   <div class="w-100">
     <b-row class="pagination">
-      <b-col cols="4">
+      <b-col >
         <button
           class="navigate-button"
           type="button"
@@ -33,7 +33,7 @@
         </button>
       </b-col>
 
-      <b-col cols="4">
+      <b-col>
         <div v-for="(page, index) in pages" :key="index" class="paginate-item">
           <button
             class=""
@@ -49,7 +49,7 @@
         </div>
       </b-col>
 
-      <b-col cols="4">
+      <b-col>
         <button
           class="navigate-button"
           type="button"
@@ -203,5 +203,10 @@ export default {
   color: #0619c580;
   opacity: 0.9;
   box-shadow: 0px 10px 15px -3px #0619c580;
+}
+::v-deep .col {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
 }
 </style>
