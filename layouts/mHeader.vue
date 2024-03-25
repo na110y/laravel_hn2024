@@ -163,6 +163,7 @@ export default {
       isMessgers: false,
       username: '',
       user_id: '',
+      isAdmin: null,
       messages: [],
     };
   },
@@ -182,6 +183,9 @@ export default {
     if (this.$auth.user) {
         this.username = this.$auth.user.name;
         this.user_id = this.$auth.user.user_id;
+        this.isAdmin = this.$auth.user.role;
+
+
     }
   },
   created() {
@@ -192,11 +196,7 @@ export default {
     this.listPending();
     this.listMessages();
   },
-  computed: {
-    ...mapState({
-      isAdmin: state => state.role,
-    })
-  },
+
   methods: {
     async submit() {
       await this.$axios.post('http://localhost:8080/api/messages', {
