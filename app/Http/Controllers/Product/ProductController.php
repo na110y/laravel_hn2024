@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserCar\UserCartController;
 use App\Models\Product\branchProduct;
 use App\Models\Product\product;
 use Carbon\Carbon;
@@ -12,6 +13,12 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
+    protected $userCart;
+    public function __construct(UserCartController $userCart)
+    {
+        $this->userCart = $userCart;
+    }
+
     public function getProduct()
     {
         try {
@@ -20,6 +27,7 @@ class ProductController extends Controller
                 'product_ao.*'
             ])
             ->get();
+
             return $product;
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
@@ -54,6 +62,7 @@ class ProductController extends Controller
                 'branch_product.*',
             ])->get();
 
+            // $userCart = $this->userCart->userBuysProduct($request);
             if (!$detailProductBranch) {
                 Log::error("ProductController - detailProductBranch: " . "Thất bại!");
                 return 0;

@@ -26,7 +26,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/register', [LoginController::class, 'register'])->name('register');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
@@ -43,20 +47,31 @@ Route::prefix('product')->group(function () {
     Route::get('/get-detail-product/{product_code}',[ProductController::class, 'getDetailProduct']);
 });
 
-Route::prefix('cart-api')->group(function () {
-    Route::get('/user-buys-product', [UserCartController::class, 'userBuysProduct']);
-    Route::post('/post-detail-product-cart',[UserCartController::class, 'postDetailProductCart']);
-    Route::get('/get-detail-product-cart/{product_code}',[UserCartController::class, 'getDetailProductCart']);
-    Route::delete('/delete-detail-product-cart/{id}',[UserCartController::class, 'getDeleteDetailProductCart']);
-    Route::post('/post-confirms-product',[UserCartController::class, 'postConfirmsProduct']);
+// Route::prefix('product')->group(function () {
+//     Route::get('/get-product', [ProductController::class, 'getProduct'])->middleware('auth');
+//     Route::get('/get-detail-product/{product_code}',[ProductController::class, 'getDetailProduct'])->middleware('auth');
+// });
+
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::prefix('cart-api')->group(function () {
+        Route::get('/user-buys-product', [UserCartController::class, 'userBuysProduct']);
+        Route::post('/post-detail-product-cart',[UserCartController::class, 'postDetailProductCart']);
+        Route::get('/get-detail-product-cart/{product_code}',[UserCartController::class, 'getDetailProductCart']);
+        Route::delete('/delete-detail-product-cart/{id}',[UserCartController::class, 'getDeleteDetailProductCart']);
+        Route::post('/post-confirms-product',[UserCartController::class, 'postConfirmsProduct']);
+    });
+
+    Route::prefix('product-pending')->group(function () {
+        Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
+        Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'handleCancelProduct']);
+    });
+
+    Route::prefix('export')->group(function () {
+        Route::get('/export-excel-registration', [ProductPendingController::class, 'exportExcel']);
+        Route::get('/export-pdf', [ProductPendingController::class, 'exportPdf']);
+    });
 });
 
-Route::prefix('product-pending')->group(function () {
-    Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
-    Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'handleCancelProduct']);
-});
 
-Route::prefix('export')->group(function () {
-    Route::get('/export-excel-registration', [ProductPendingController::class, 'exportExcel']);
-    Route::get('/export-pdf', [ProductPendingController::class, 'exportPdf']);
-});
+
