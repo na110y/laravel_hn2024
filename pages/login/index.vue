@@ -84,6 +84,8 @@ export default {
                     password: this.userLogin.user_passwork
                 }
                 });
+                const userRole = res.data.role;
+                this.$store.dispatch('setUserRole', userRole);
                 this.$router.push("/");
                 this.showToast('success', 'Đăng nhập thành công!');
             } catch (error) {

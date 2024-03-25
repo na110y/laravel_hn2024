@@ -22,7 +22,7 @@
                   </nuxt-link>
                 </div>
               </li>
-              <li>
+              <li v-if="!isAdmin">
                 <div class="menu-link">
                   <nuxt-link to="/cart">
                     {{ $t('header.cart') }}
@@ -38,7 +38,7 @@
               </li>
             </ul>
             <ul class="menu-icon">
-              <li>
+              <li v-if="!isAdmin">
                 <div class="menu-icon_mess">
                   <img src="@/assets/img/search.svg" alt="error-icon" id="icon" @click.prevent="btnSearch">
                 </div>
@@ -74,7 +74,7 @@
                   </div>
                 </div>
               </li>
-              <li>
+              <li v-if="!isAdmin">
                 <div class="menu-icon_notif">
                   <img src="@/assets/img/notif.svg" alt="error-icon" id="icon" @click="btnIsShowProductNoti">
                   <div class="product-cart-mini" v-if="listProduct.length > 0"></div>
@@ -149,6 +149,7 @@
 import cartApi from '~/plugins/api/listCart';
 import { EventBus } from '~/plugins/event-bus.js';
 import Pusher from 'pusher-js';
+import { mapState } from 'vuex'
 // import { mapState } from 'vuex';
 export default {
   middleware: ['auth'],
@@ -162,22 +163,22 @@ export default {
       isMessgers: false,
       username: '',
       user_id: '',
-      messages: []
+      messages: [],
     };
   },
   mounted() {
     window.addEventListener("click", this.handleClickOutside);
 
-    Pusher.logToConsole = true;
-    const pusher = new Pusher('0624ad209e23f1ff966f', {
-      cluster: 'eu',
-      encrypted: true,
-    });
+    // Pusher.logToConsole = true;
+    // const pusher = new Pusher('0624ad209e23f1ff966f', {
+    //   cluster: 'eu',
+    //   encrypted: true,
+    // });
 
-    const channel = pusher.subscribe('chat');
-      channel.bind('message', data => {
-      this.messages.push(data);
-    });
+    // const channel = pusher.subscribe('chat');
+    //   channel.bind('message', data => {
+    //   this.messages.push(data);
+    // });
     if (this.$auth.user) {
         this.username = this.$auth.user.name;
         this.user_id = this.$auth.user.user_id;
@@ -190,6 +191,11 @@ export default {
 
     this.listPending();
     this.listMessages();
+  },
+  computed: {
+    ...mapState({
+      isAdmin: state => state.role,
+    })
   },
   methods: {
     async submit() {
@@ -278,7 +284,6 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
-        this.$store.commit('SET_INFOLOGIN', );
         this.showToast('success', 'Đăng xuất thành công!');
         this.isShowInfoLogin = !this.isShowInfoLogin;
         this.$router.push('/login');
