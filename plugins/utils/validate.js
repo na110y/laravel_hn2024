@@ -16,6 +16,20 @@ export default ({ app }, inject) => {
         return moment(datetime, "HH:mm:ss").format("HH:mm");
       },
 
+      // validation theo giới tính
+      formatGender(gender) {
+        switch (gender) {
+          case 0:
+              return "Nữ";
+          case 1:
+            return "Nam";
+          case 2:
+            return "Khác";
+          default:
+            break;
+        }
+      },
+
       // validation theo dạng tiền tệ
       formatCurrency(amount) {
         const formattedAmount = new Intl.NumberFormat('vi-VN', {

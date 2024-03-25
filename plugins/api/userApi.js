@@ -13,8 +13,21 @@ const userApi = {
     });
   },
 
+  // lấy danh sách tất cả người dùng sau khi đăng ký thành công
+  getAllUser(param) {
+    return userApi.setupCSRFCookie().then(() => {
+      return axios.get('http://localhost:8000/api/info-user/get-all-info-user', { param : param , withCredentials: true });
+    });
+  },
 
-    // lấy danh sách người dùng sau khi đăng ký thành công
+  // Xóa thông tin của người dùng
+  deleteUser(id) {
+    return cartApi.setupCSRFCookie().then(() => {
+      return axios.delete(`http://localhost:8000/api/info-user/delete-detail-user/${id}` ,{ withCredentials: true });
+    });
+  },
+
+  // lấy danh sách người dùng sau khi đăng ký thành công
   getListUser() {
     return userApi.setupCSRFCookie().then(() => {
       return axios.get('http://localhost:8000/api/info-user/get-info-user', { withCredentials: true });

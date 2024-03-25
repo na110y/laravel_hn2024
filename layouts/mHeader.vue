@@ -22,7 +22,14 @@
                   </nuxt-link>
                 </div>
               </li>
-              <li v-if="!isAdmin">
+              <li v-if="isAdmin !== 2">
+                <div class="menu-link">
+                  <nuxt-link to="/user">
+                    {{ $t('header.user') }}
+                  </nuxt-link>
+                </div>
+              </li>
+              <li v-if="isAdmin !== 1">
                 <div class="menu-link">
                   <nuxt-link to="/cart">
                     {{ $t('header.cart') }}
@@ -38,7 +45,7 @@
               </li>
             </ul>
             <ul class="menu-icon">
-              <li v-if="!isAdmin">
+              <li v-if="isAdmin !==  1">
                 <div class="menu-icon_mess">
                   <img src="@/assets/img/search.svg" alt="error-icon" id="icon" @click.prevent="btnSearch">
                 </div>
@@ -74,7 +81,7 @@
                   </div>
                 </div>
               </li>
-              <li v-if="!isAdmin">
+              <li v-if="isAdmin !==  1">
                 <div class="menu-icon_notif">
                   <img src="@/assets/img/notif.svg" alt="error-icon" id="icon" @click="btnIsShowProductNoti">
                   <div class="product-cart-mini" v-if="listProduct.length > 0"></div>
@@ -152,7 +159,7 @@ import Pusher from 'pusher-js';
 import { mapState } from 'vuex'
 // import { mapState } from 'vuex';
 export default {
-  middleware: ['auth'],
+  middleware: 'auth',
   data() {
     return {
       toastVariant: "info",
@@ -163,7 +170,7 @@ export default {
       isMessgers: false,
       username: '',
       user_id: '',
-      isAdmin: null,
+      isAdmin: '',
       messages: [],
     };
   },
@@ -184,8 +191,6 @@ export default {
         this.username = this.$auth.user.name;
         this.user_id = this.$auth.user.user_id;
         this.isAdmin = this.$auth.user.role;
-
-
     }
   },
   created() {

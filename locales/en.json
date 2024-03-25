@@ -28,6 +28,7 @@
     "header": {
         "home": "Home",
         "product": "Product",
+        "user": "User",
         "cart": "Cart",
         "pending": "Order"
     },
