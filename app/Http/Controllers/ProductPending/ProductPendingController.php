@@ -11,6 +11,7 @@ use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use niklasravnsborg\LaravelPdf\Facades\Pdf as PDF2;

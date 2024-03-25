@@ -195,7 +195,7 @@ class UserCartController extends Controller
             }
         }catch (\Throwable $th) {
             error_log($th);
-            Log::error('-------delete SV EBook-------');
+            Log::error('-------delete ProductCart-------');
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response(['error' => $th], 500);
         }

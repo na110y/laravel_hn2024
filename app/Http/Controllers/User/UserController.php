@@ -14,6 +14,51 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    // lấy danh sách tất thông tin của người dùng khi đăng nhập thành công
+    public function getAllInfoUser(Request $request) 
+    {
+        try {
+            Log::info($request->id);
+            $info_user = infoUser::query()
+            ->select([
+                'info_user.*'
+            ]);
+            if (isset($request->id) && $request->id) {
+                $info_user->where('info_user.id', '=', $request->id);
+            }
+
+            $info_user->orderBy('info_user.id', 'DESC')->get();
+            $data = $info_user->paginate(8);
+
+            return $data;
+        } catch (\Throwable $th) {
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response([
+                'status' => 500,
+                'data' => []
+            ], 500);
+        } 
+    }
+
+    // Xóa thông tin của người dùng
+    public function deleteDetailUser(Request $request)
+    {
+        try {
+            $deleteUser = infoUser::where('id',$request->id)
+            ->where('id', $request->id)->delete();
+            if (!$deleteUser) {
+                return response()->json(['Không tìm được người dùng cần xóa!'], 500);
+            }
+            return response()->json(['Xóa thành công!'], 200);
+        }catch (\Throwable $th) {
+            error_log($th);
+            Log::error('-------delete detail user-------');
+            Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
+            return response(['error' => $th], 500);
+        }
+    }
+
+
     // lấy danh sách thông tin của người dùng khi đăng nhập thành công
     public function getInfoUser(Request $request) 
     {

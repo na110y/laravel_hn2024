@@ -32,9 +32,18 @@ class LoginController extends Controller
         try {
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
-                $user = Auth::user();
-                $request->session()->put('user', $user);
-                return response()->json(['message' => 'Thành công'], 200);
+                $info_login = Auth::user();
+
+                if ($info_login->role === 1) {
+                    $request->session()->put('admin', $info_login);
+                    return response()->json(['message' => 'Đăng nhập với tư cách admin!', 'role' => $info_login->role], 200);
+                } else {
+                    $request->session()->put('user', $info_login);
+                    return response()->json(['message' => 'Đăng nhập với tư cách người dùng!'], 200);
+                }
+
+                // $request->session()->put('user', $user);
+                // return response()->json(['message' => 'Thành công'], 200);
             } else {
                 return response()->json(['message' => 'Thất bại'], 500);
             }
