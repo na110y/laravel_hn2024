@@ -189,9 +189,9 @@
 
             // xóa sản phẩm trong giỏ hàng
 
-            btnDelete(item) {
+            async btnDelete(item) {
                 if (confirm(`Bạn có chắc xóa sản phẩm : ${item.fullName}`)) {
-                    this.deleteUserDetail(item);
+                    await this.deleteUserDetail(item);
                 }
 
             },

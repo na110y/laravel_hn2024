@@ -22,7 +22,7 @@ const userApi = {
 
   // Xóa thông tin của người dùng
   deleteUser(id) {
-    return cartApi.setupCSRFCookie().then(() => {
+    return userApi.setupCSRFCookie().then(() => {
       return axios.delete(`http://localhost:8000/api/info-user/delete-detail-user/${id}` ,{ withCredentials: true });
     });
   },
