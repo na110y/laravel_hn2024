@@ -19,14 +19,13 @@ export default {
     props: {
         showToast: {
             type: Object,
-            required: true
         }
     },
     data() {
         return {
             toastData: {
                 variant: 'info',
-                message: null
+                message: ''
             }
         };
     },

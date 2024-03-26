@@ -51,8 +51,6 @@ export default {
     return {
       listProduct : [],
       isLoading: false,
-      toastVariant: "info",
-      toastMessage: null,
       selectedProduct:null,
       productBody: [
         { value: '1', text: 'Giá tăng dần' },
