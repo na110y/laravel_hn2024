@@ -8,7 +8,7 @@
               </nuxt-link>
             </div>
             <ul class="menu-item">
-              <li>
+              <li v-if="isAdmin !== 1">
                 <div class="menu-link">
                   <nuxt-link to="/">
                     {{ $t('header.home') }}
@@ -36,7 +36,7 @@
                   </nuxt-link>
                 </div>
               </li>
-              <li>
+              <li v-if="isAdmin !== 1">
                 <div class="menu-link">
                   <nuxt-link to="/pending">
                     {{ $t('header.pending') }}

@@ -58,6 +58,10 @@
                                     <template #cell(action)="row">
                                         <div class="action-table">
                                             <div class="btn-table">
+                                                <b-button variant="info" class="btn-table_delete" size="sm" @click="btnProductHandle(row.item)">
+                                                    <b-icon icon="pen" aria-hidden="true"></b-icon>
+                                                    Xử lý
+                                                </b-button>
                                                 <b-button variant="danger" class="btn-table_delete" size="sm" @click="btnDelete(row.item)">
                                                     <b-icon icon="x-square" aria-hidden="true"></b-icon>
                                                     Xóa
@@ -90,6 +94,11 @@
             <div class="productNull-title">Không có thông tin người dùng!</div>
         </div>
 
+        <product-pending
+            :detail-product-user="showModalDetailUser"
+            :detail-user="detailProductUser"
+            @cancel="isShowModal"
+        />
         <Toast :show-toast="toastData" />
     </b-container>
 </template>
@@ -101,12 +110,14 @@
     import Pagination from "@/components/paginate/index.vue";
     import { EventBus } from '~/plugins/event-bus.js';
     import Toast from '@/components/Toast/index.vue';
+    import ProductPending from '@/components/ProductPending/index.vue';
     export default {
         name: 'ProductCart',
         components: {
             Loading,
             Pagination,
-            Toast
+            Toast,
+            ProductPending
         },
         data() {
             return {
@@ -134,10 +145,16 @@
                     keywords: "",
                 },
                 toastData: null,
-
+                isAdmin: '',
+                showModalDetailUser: false,
+                detailProductUser: null,
             }
         },
-        
+        mounted() {
+            if (this.$auth.user) {
+                this.isAdmin = this.$auth.user.role;
+            }
+        },
         created() {
             EventBus.$on('listProductChanged', () => {
                 this.listUserItem();
@@ -156,6 +173,19 @@
                 this.listUserItem();
             },
             
+            // Chi tiết sản phẩm của người dùng đang chờ xử lý
+            btnProductHandle(item) {
+                this.btnShowModal(item)
+            },
+
+            isShowModal(showModalDetailUser) {
+                this.showModalDetailUser = showModalDetailUser;
+            },
+
+            btnShowModal(item) {
+                this.detailProductUser = item.id;
+                this.isShowModal(true);
+            },
 
             // lấy ra danh sách người dùng
             async listUserItem() {
