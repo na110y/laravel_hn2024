@@ -62,6 +62,7 @@ class LoginController extends Controller
                 'name' => $request->user_name,
                 'email' => $request->user_email,
                 'password' => bcrypt($request->user_password),
+                'role' => 2
             ]);
             $user_info = infoUser::create([
                 'user_id' => $user->user_id,
