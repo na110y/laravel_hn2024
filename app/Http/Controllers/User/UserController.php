@@ -18,19 +18,30 @@ class UserController extends Controller
     public function getAllInfoUser(Request $request) 
     {
         try {
-            Log::info($request->id);
-            $info_user = infoUser::query()
-            ->select([
-                'info_user.*'
-            ]);
-            if (isset($request->id) && $request->id) {
-                $info_user->where('info_user.id', '=', $request->id);
+            $admin = $request->session()->get('admin');
+            $isAdimn = $admin->role;
+            if($isAdimn == 1) {
+                $info_user = infoUser::query()
+                ->select([
+                    'info_user.*'
+                ]);
+
+                if (isset($request->keywords) && $request->keywords) {
+                    $searchTerm = '%' . $request->keywords . '%';
+                    $info_user->where(function ($query) use ($searchTerm) {
+                        $query->orWhere('info_user.id', 'like', $searchTerm)
+                              ->orWhere('info_user.fullName', 'like', $searchTerm)
+                              ->orWhere('info_user.adress', 'like', $searchTerm)
+                              ->orWhere('info_user.sdt', 'like', $searchTerm)
+                              ->orWhere('info_user.staff', 'like', $searchTerm);
+                    });
+                }
+    
+                $info_user->orderBy('info_user.id', 'DESC')->get();
+                $data = $info_user->paginate(8);
+    
+                return $data;
             }
-
-            $info_user->orderBy('info_user.id', 'DESC')->get();
-            $data = $info_user->paginate(8);
-
-            return $data;
         } catch (\Throwable $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());
             return response([

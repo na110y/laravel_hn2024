@@ -10,6 +10,7 @@ class infoUser extends Model
     use HasFactory;
     protected $table = 'info_user';
     protected $fillable = [
+        "id",
         "user_id",
         "name",
         "fullName",
