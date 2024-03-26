@@ -34,17 +34,6 @@
           </div>
       </div>
 
-      <b-toast
-        ref="customToast"
-        no-auto-hide
-        :variant="toastVariant"
-        class="my-custom-toast"
-        >
-        <template #toast-title>
-            <strong>Thông báo</strong>
-        </template>
-        <span class="my-custom-toast-message">{{ toastMessage }}</span>
-      </b-toast>
     </b-container>
 </template>
   
@@ -52,17 +41,16 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import productApi from '~/plugins/api/listProduct';
+
   export default {
     name: 'ProductAo',
     components: {
-        Loading
+        Loading,
     },
     data() {
       return {
         listProduct : [],
         isLoading: false,
-        toastVariant: "info",
-        toastMessage: null,
         selectedProduct:null,
         productBody: [
           { value: 1, text: 'Giá tăng dần' },
@@ -102,18 +90,6 @@ import productApi from '~/plugins/api/listProduct';
               this.isLoading = false;
           });
       },
-  
-      showToast(variant, message) {
-        this.toastVariant = variant;
-        this.toastMessage = message;
-        this.$refs.customToast.show();
-  
-        setTimeout(() => {
-            this.$refs.customToast.hide();
-        }, 3000);
-      },
-  
-  
     },
   }
 </script>

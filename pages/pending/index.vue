@@ -88,17 +88,7 @@
             <div v-else class="content-text">Chưa có đơn hàng nào được xử lý!</div>
         </div>
 
-        <b-toast
-            ref="customToast"
-            no-auto-hide
-            :variant="toastVariant"
-            class="my-custom-toast"
-        >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+        <Toast :show-toast="toastData" />
         
     </b-container>
 </template>
@@ -107,15 +97,17 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import pendingApi from '~/plugins/api/listPending';
+import Toast from '@/components/Toast/index.vue';
+
 export default {
     components: {
         Loading,
+        Toast
     },
     data() {
         return {
             isLoading: false,
-            toastVariant: "info",
-            toastMessage: null,
+            toastData: null,
             listProduct: [],
             list_step : [
                 { step: 0, stepName: 'Chờ xử lý' },
@@ -179,22 +171,11 @@ export default {
                 .then((res) => {
                     this.listPending();
                     this.isLoading = false;
-                    this.showToast("success", "Hủy đơn hàng thành công!");
+                    this.toastData = { variant: 'success', message: 'Hủy đơn hàng thành công!' };
                 })
                 .catch((err) => {
                     this.isLoading = false;
                 });
-        },
-
-
-        showToast(variant, message) {
-            this.toastVariant = variant;
-            this.toastMessage = message;
-            this.$refs.customToast.show();
-
-            setTimeout(() => {
-                this.$refs.customToast.hide();
-            }, 3000);
         },
 
         statusName(status) {

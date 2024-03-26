@@ -66,17 +66,7 @@
                
             </div>
 
-            <b-toast
-                ref="customToast"
-                no-auto-hide
-                :variant="toastVariant"
-                class="my-custom-toast"
-            >
-                <template #toast-title>
-                    <strong>Thông báo</strong>
-                </template>
-                <span class="my-custom-toast-message">{{ toastMessage }}</span>
-            </b-toast>
+            <Toast :show-toast="toastData" />
         </b-card>
     </b-container>
 </template>
@@ -86,11 +76,13 @@ import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import productApi from '~/plugins/api/listProduct';
 import cartApi from '~/plugins/api/listCart';
+import Toast from '@/components/Toast/index.vue';
 
 export default {
     name: 'ProductDetail',
     components: {
-        Loading
+        Loading,
+        Toast
     },
     data() {
         return {
@@ -115,6 +107,7 @@ export default {
             toastVariant: "info",
             toastMessage: null,
             isLoading: false,
+            toastData: null,
 
         }
     },
@@ -122,16 +115,6 @@ export default {
         this.getDetailProduct();
     },
     methods:{
-        showToast(variant, message) {
-            this.toastVariant = variant;
-            this.toastMessage = message;
-            this.$refs.customToast.show();
-
-            setTimeout(() => {
-                this.$refs.customToast.hide();
-            }, 3000);
-        },
-
         async getDetailProduct() {
             this.isLoading = true;
             const productCode = this.$route.params.id;
@@ -180,13 +163,13 @@ export default {
             };
             await cartApi.productCart(param)
                 .then((res) => {
-                    this.showToast("success", "Thêm thành công vào giỏ hàng!");
+                    this.toastData = { variant: 'success', message: 'Thêm thành công vào giỏ hàng!' };
                     this.$store.dispatch("showNotification");
                     this.isLoading = false;
                 })
                 .catch((err) => {
-                    this.showToast("warning", "Bạn chưa đăng nhập tài khoản!");
                     this.isLoading = false;
+                    this.toastData = { variant: 'warning', message: 'Bạn chưa đăng nhập tài khoản!' };
                 });
         },
     }

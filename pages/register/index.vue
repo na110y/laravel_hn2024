@@ -43,17 +43,8 @@
                 </div>
             </b-form>
         </div>
-        <b-toast
-            ref="customToast"
-            no-auto-hide
-            :variant="toastVariant"
-            class="my-custom-toast"
-            >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+
+        <Toast :show-toast="toastData" />
     </b-container>
 </template>
 
@@ -61,10 +52,12 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import userApi from '~/plugins/api/userApi';
+import Toast from '@/components/Toast/index.vue';
 
 export default {
     components: {
-        Loading
+        Loading,
+        Toast
     },
     data() {
         return {
@@ -74,8 +67,7 @@ export default {
                 user_password: '',
                 check_password: ''
             },
-            toastVariant: "info",
-            toastMessage: null,
+            toastData: null,
             isPasswordPW: false,
             isPasswordCheck: false,
             isLoading: false,
@@ -85,7 +77,8 @@ export default {
         async onSubmit() {
             try {
                 if (this.userRegister.user_password !== this.userRegister.check_password) {
-                    return this.showToast('warning', 'Mật khẩu nhập lại không khớp!');
+                    return this.toastData = { variant: 'warning', message: 'Mật khẩu nhập lại không khớp!' };
+                    
                 }
                 const param = {
                     user_name: this.userRegister.user_name,
@@ -102,14 +95,14 @@ export default {
                             password: this.userRegister.user_password
                         }
                     });
-                    this.showToast('success', 'Đăng ký thành công!');
+                    this.toastData = { variant: 'success', message: 'Đăng ký thành công!' };
                     this.isLoading = false;
                 })
                 .catch((error) => {
                     this.isLoading = false;
                 });
             } catch (error) {
-                this.showToast('warning', 'Đã xảy ra lỗi trong quá trình đăng ký');
+                this.toastData = { variant: 'warning', message: 'Đã xảy ra lỗi trong quá trình đăng ký!' };
             }
         },
 
@@ -119,16 +112,6 @@ export default {
 
         isShowTypeCheck() {
             this.isPasswordCheck = !this.isPasswordCheck;
-        },
-
-        showToast(variant, message) {
-            this.toastVariant = variant;
-            this.toastMessage = message;
-            this.$refs.customToast.show();
-
-            setTimeout(() => {
-                this.$refs.customToast.hide();
-            }, 3000);
         },
     }
 }

@@ -136,34 +136,26 @@
           </div>
         </div>
 
-        <b-toast
-          ref="customToast"
-          no-auto-hide
-          :variant="toastVariant"
-          class="my-custom-toast"
-          >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+        <Toast :show-toast="toastData" />
     </b-container>
 </template>
 
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 <script>
 import cartApi from '~/plugins/api/listCart';
 import { EventBus } from '~/plugins/event-bus.js';
 import Pusher from 'pusher-js';
-import { mapState } from 'vuex'
-// import { mapState } from 'vuex';
+import { mapState } from 'vuex';
+import Toast from '@/components/Toast/index.vue';
 export default {
   middleware: 'auth',
+  components: {
+    Toast
+  },
   data() {
     return {
-      toastVariant: "info",
-      toastMessage: null,
+      toastData: null,
       isShowInfoLogin : false,
       listProduct: [],
       isShowProductNoti : false,
@@ -278,10 +270,10 @@ export default {
             this.isLoading = false;
             this.listPending();
             EventBus.$emit('listProductChanged', res.data);
-            this.showToast('success', 'Xóa sản phẩm thành công!');
+            this.toastData = { variant: 'success', message: 'Xóa sản phẩm thành công!' };
         })
         .catch((err) => {
-            this.showToast('danger', 'Xóa sản phẩm thất bại!');
+            this.toastData = { variant: 'warning', message: 'Xóa sản phẩm thất bại!' };
             this.isLoading = false;
         });
     },
@@ -289,7 +281,8 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
-        this.showToast('success', 'Đăng xuất thành công!');
+        this.toastData = { variant: 'success', message: 'Đăng xuất thành công!' };
+
         this.isShowInfoLogin = !this.isShowInfoLogin;
         this.$router.push('/login');
       } catch (error) {
@@ -301,17 +294,6 @@ export default {
       console.log(1);
       this.isShowInfoLogin = !this.isShowInfoLogin;
     },
-
-    showToast(variant, message) {
-      this.toastVariant = variant;
-      this.toastMessage = message;
-      this.$refs.customToast.show();
-
-      setTimeout(() => {
-          this.$refs.customToast.hide();
-      }, 3000);
-    },
-
   },
 };
 </script>

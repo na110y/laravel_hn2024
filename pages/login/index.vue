@@ -40,26 +40,20 @@
                 </div>
             </b-form>
         </div>
-        <b-toast
-            ref="customToast"
-            no-auto-hide
-            :variant="toastVariant"
-            class="my-custom-toast"
-            >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+
+        <Toast :show-toast="toastData" />
     </b-container>
 </template>
 
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import Toast from '@/components/Toast/index.vue';
+
 export default {
     components: {
-        Loading
+        Loading,
+        Toast
     },
     
     data() {
@@ -68,8 +62,7 @@ export default {
                 user_email: '',
                 user_passwork: ''
             },
-            toastVariant: "info",
-            toastMessage: null,
+            toastData: null,
             isPasswordVisible: false,
             isLoading: false,
             user_name: '',
@@ -87,19 +80,11 @@ export default {
                 // const userRole = res.data.role;
                 // this.$store.dispatch('setUserRole', userRole);
                 this.$router.push("/");
-                this.showToast('success', 'Đăng nhập thành công!');
+                this.toastData = { variant: 'success', message: 'Đăng nhập thành công!' };
             } catch (error) {
-                this.showToast('warning', 'Thông tin không hợp lệ!');
-            }
-        },
-        showToast(variant, message) {
-            this.toastVariant = variant;
-            this.toastMessage = message;
-            this.$refs.customToast.show();
+                this.toastData = { variant: 'warning', message: 'Thông tin không hợp lệ!' };
 
-            setTimeout(() => {
-                this.$refs.customToast.hide();
-            }, 3000);
+            }
         },
 
         isShowType() {

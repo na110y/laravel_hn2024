@@ -120,17 +120,7 @@
             <div class="productNull-title">Không có sản phẩm nào trong giỏ hàng!</div>
         </div>
 
-        <b-toast
-            ref="customToast"
-            no-auto-hide
-            :variant="toastVariant"
-            class="my-custom-toast"
-            >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+        <Toast :show-toast="toastData" />
     </b-container>
 </template>
   
@@ -140,18 +130,19 @@
     import cartApi from '~/plugins/api/listCart';
     import Pagination from "@/components/paginate/index.vue";
     import { EventBus } from '~/plugins/event-bus.js';
+    import Toast from '@/components/Toast/index.vue';
     export default {
         name: 'ProductCart',
         components: {
             Loading,
-            Pagination
+            Pagination,
+            Toast
         },
         data() {
             return {
                 isLoading: false,
                 toastVariant: "info",
-                toastMessage: null,
-                isShowCartTable: true,
+                toastData: null,
                 isShowCartColumn: false,
                 fields: [
                     // { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
@@ -215,7 +206,8 @@
             addProductCart() {
                 this.isLoading = true;
                 if (this.selectedPayment == null) {
-                    return this.showToast('warning', 'vui lòng chọn phương thức thanh toán!'),  this.isLoading = false; 
+                    return this.toastData = { variant: 'warning', message: 'vui lòng chọn phương thức thanh toán!' }, this.isLoading = false; 
+                    
                 }
                 const params = {
                     listProduct : this.listProductCart,
@@ -300,22 +292,12 @@
                     this.isLoading = false;
                     this.listUserItem();
                     EventBus.$emit('listProductChanged', res.data);
-                    this.showToast('success', 'Xóa sản phẩm thành công!');
+                    this.toastData = { variant: 'success', message: 'Xóa sản phẩm thành công!' };
                 })
                 .catch((err) => {
-                    this.showToast('danger', 'Xóa sản phẩm thất bại!');
                     this.isLoading = false;
+                    this.toastData = { variant: 'warning', message: 'Xóa sản phẩm thất bại!' };
                 });
-            },
-    
-            showToast(variant, message) {
-                this.toastVariant = variant;
-                this.toastMessage = message;
-                this.$refs.customToast.show();
-        
-                setTimeout(() => {
-                    this.$refs.customToast.hide();
-                }, 3000);
             },
 
             sizeProduct(size) {

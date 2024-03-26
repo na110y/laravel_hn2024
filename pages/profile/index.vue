@@ -6,17 +6,7 @@
             :is-full-page="true"
         ></loading>
 
-        <b-toast
-            ref="customToast"
-            no-auto-hide
-            :variant="toastVariant"
-            class="my-custom-toast"
-            >
-            <template #toast-title>
-                <strong>Thông báo</strong>
-            </template>
-            <span class="my-custom-toast-message">{{ toastMessage }}</span>
-        </b-toast>
+        <Toast :show-toast="toastData" />
 
         <div class="profile">
             <div class="profile_txt">
@@ -155,10 +145,12 @@
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import userApi from '~/plugins/api/userApi';
+import Toast from '@/components/Toast/index.vue';
 
 export default {
     components: {
-        Loading
+        Loading,
+        Toast
     },
     data() {
         return {
@@ -178,8 +170,7 @@ export default {
                 { value: 'vn', text: 'Tiếng Việt' },
                 { value: 'en', text: 'Tiếng Anh' },
             ],
-            toastVariant: "info",
-            toastMessage: null,
+            toastData: null,
             isLoading: false,
             listUser : [],
             isPasswordPW: false,
@@ -215,12 +206,12 @@ export default {
 
             await userApi.postInfoUser(info_user, param)
             .then((res) => {
-                this.showToast('success', 'Cập nhập thành công!');
+                this.toastData = { variant: 'success', message: 'Cập nhập thành công!' };
                 this.isLoading = false;
             })
             .catch((err) => {
-                this.showToast('error', 'Cập nhập thất bại!');
                 this.isLoading = false;
+                this.toastData = { variant: 'warning', message: 'Cập nhập thất bại!' };
             });
         },
 
@@ -238,15 +229,6 @@ export default {
             .catch((err) => {
                 this.isLoading = false;
             });
-        },
-        showToast(variant, message) {
-            this.toastVariant = variant;
-            this.toastMessage = message;
-            this.$refs.customToast.show();
-
-            setTimeout(() => {
-                this.$refs.customToast.hide();
-            }, 3000);
         },
         isShowTypeCheck() {
             this.isPasswordCheck = !this.isPasswordCheck;
