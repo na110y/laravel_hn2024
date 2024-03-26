@@ -19,33 +19,6 @@ use niklasravnsborg\LaravelPdf\Facades\Pdf as PDF2;
 
 class ProductPendingController extends Controller
 {
-    const LIST_STEP = [
-        [
-            "id" => 0,
-            "name" => "Chờ xử lý",
-            "step" => 0,
-        ],
-        [
-            "id" => 1,
-            "name" => "Chờ giao hàng",
-            "step" => 1,
-        ],
-        [
-            "id" => 2,
-            "name" => "Hoàn thành",
-            "step" => 2,
-        ],
-        [
-            "id" => 3,
-            "name" => "Đã hủy",
-            "step" => 3,
-        ],
-        [
-            "id" => 4,
-            "name" => "Trả hàng && hoàn tiền",
-            "step" => 4,
-        ]
-    ];
 
     // danh sách sản phẩm đang trong quá trình xử lý
     public function getProductPending(Request $request)

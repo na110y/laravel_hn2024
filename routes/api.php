@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\NextStep\NextStepController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\ProductPending\ProductPendingController;
 use App\Http\Controllers\User\UserController;
@@ -71,9 +72,9 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     # Next step duyệt sản phẩm của khách hàng
-    Route::prefix('product-pending')->group(function () {
-        Route::get('/get-product-pending', [ProductPendingController::class, 'getProductPending']);
-        Route::post('/post-product-nextStep-pending',[ProductPendingController::class, 'handleCancelProduct']);
+    Route::prefix('next-step')->group(function () {
+        Route::get('/get-list-product', [NextStepController::class, 'getListProduct']);
+        Route::post('/next-step-product-pending',[NextStepController::class, 'nextStepProductPending']);
     });
 
     # xuất ra file thông tin của tất cả sản phẩm của khách hàng
