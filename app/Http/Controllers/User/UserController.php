@@ -8,6 +8,7 @@ use App\Models\User\infoUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -55,11 +56,25 @@ class UserController extends Controller
     public function deleteDetailUser(Request $request)
     {
         try {
-            $deleteUser = infoUser::where('id',$request->id)
-            ->where('id', $request->id)->delete();
-            if (!$deleteUser) {
-                return response()->json(['Không tìm được người dùng cần xóa!'], 500);
+            DB::beginTransaction();
+            $info_user = infoUser::where('id',$request->id)->first();
+
+            if (!$info_user) {
+                DB::rollBack();
+                return response()->json(['message' => 'Không tìm thấy người dùng!'], 404);
             }
+
+            $user_id =  $info_user->user_id;
+
+            $deleteInfoUser = infoUser::where('user_id',$user_id)->delete();
+            $deleteUser = User::where('user_id',$user_id)->delete();
+
+            if (!$deleteInfoUser || !$deleteUser) {
+                DB::rollBack();
+                return response()->json(['message' => 'Không tìm thấy người dùng!'], 500);
+            }
+
+            DB::commit();
             return response()->json(['Xóa thành công!'], 200);
         }catch (\Throwable $th) {
             error_log($th);
@@ -94,6 +109,7 @@ class UserController extends Controller
     public function updateInfo(Request $request) 
     {
         try {
+            DB::beginTransaction();
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
             $user_info = infoUser::where('user_id', $checkID)->update([
@@ -106,7 +122,9 @@ class UserController extends Controller
                 'staff' => $info_user->name,
             ]);
 
+            DB::commit();
             if (!$user_info) {
+                DB::rollBack();
                 return response()->json(['error' => 'Thất bại'], 500);
             }
             return response()->json(['message' => 'Thành công'], 200);

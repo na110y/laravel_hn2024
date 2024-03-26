@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -57,6 +58,7 @@ class LoginController extends Controller
     public function register(Request $request)
     {
         try {
+            DB::beginTransaction();
             $user = User::create([
                 'user_id' => Str::uuid(),
                 'name' => $request->user_name,
@@ -77,19 +79,15 @@ class LoginController extends Controller
                 'staff' => $user->name,
             ]);
 
-            if (!$user_info_cart) {
-                return response()->json(['error' => 'Tạo thông giỏ hàng của người dùng thất bại!'], 500);
-            }
-
-            if (!$user_info) {
-                return response()->json(['error' => 'Tạo thông tin người dùng thất bại'], 500);
-            }
-            
-            if (!$user) {
+            // Kiểm tra xem tất cả các thao tác có thành công không
+            if (!$user || !$user_info || !$user_info_cart) {
+                DB::rollBack();
                 return response()->json(['error' => 'Đăng ký thất bại'], 500);
             }
 
             Auth::login($user);
+
+            DB::commit();
             return response()->json(['message' => 'Đăng ký thành công'], 200);
         } catch (\Exception $th) {
             Log::error('Error at ' . $th->getFile() . ' : ' . __METHOD__ . $th->getLine() . ' : ' . $th->getMessage());

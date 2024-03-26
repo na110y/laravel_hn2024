@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Utils\ResponseBuilder;
-
-
+use Illuminate\Support\Facades\DB;
 
 class UserCartController extends Controller
 {
@@ -57,6 +56,7 @@ class UserCartController extends Controller
     public function postDetailProductCart(Request $request)
     {
         try {
+            DB::beginTransaction();
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
             if($checkID !== null) {
@@ -74,9 +74,12 @@ class UserCartController extends Controller
                 ]);
 
                 if (!$user_info_cart) {
+                    DB::rollBack();
                     Log::error("postDetailProductCart" . "Thất bại!");
                     return 0;
                 }
+
+                DB::commit();
                 return $user_info_cart;
 
             }else {
@@ -95,6 +98,7 @@ class UserCartController extends Controller
     public function postConfirmsProduct(Request $request)
     {
         try {
+            DB::beginTransaction();
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
 
@@ -146,20 +150,12 @@ class UserCartController extends Controller
                 ->whereIn('product_code', $product_Code)
                 ->delete();
 
-                if(!$new_log) {
-                    Log::error("Tạo log thất bại.");
-                    return 0;
-                } 
-
-                if (!$delete_cart) {
-                    Log::error("postDetailProductCart" . "Thất bại!");
-                    return 0;
-                }
-                if (!$user_info_cart) {
-                    Log::error("postDetailProductCart" . "Thất bại!");
-                    return 0;
+                if (!$new_log || !$delete_cart || !$user_info_cart) {
+                    DB::rollBack();
+                    return response()->json(['message' => 'Thất bại!'], 500);
                 }
 
+                DB::commit();
                 return response()->json(['Thành công!'], 200);
             }else {
                 Log::error("Không có gì!");
@@ -179,6 +175,7 @@ class UserCartController extends Controller
     public function getDeleteDetailProductCart(Request $request)
     {
         try {
+            DB::beginTransaction();
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
 
@@ -186,8 +183,10 @@ class UserCartController extends Controller
                 $deleteProductCart = UserCart::where('id',$request->id)
                 ->where('user_id', $checkID)->delete();
                 if (!$deleteProductCart) {
+                    DB::rollBack();
                     return response()->json(['Không tìm được sản phẩm cần xóa!'], 500);
                 }
+                DB::commit();
                 return response()->json(['Xóa thành công!'], 200);
             }else {
                 Log::error("Không có gì!");

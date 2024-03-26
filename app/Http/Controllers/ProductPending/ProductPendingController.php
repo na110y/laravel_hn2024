@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use niklasravnsborg\LaravelPdf\Facades\Pdf as PDF2;
@@ -139,6 +140,7 @@ class ProductPendingController extends Controller
     // hủy đơn hàng 
     public function handleCancelProduct(Request $request){
         try{
+            DB::beginTransaction();
             $info_user = $request->session()->get('user');
             $checkID = $info_user->user_id;
 
@@ -150,8 +152,11 @@ class ProductPendingController extends Controller
                     'status' => 3
                 ]);
                 if(!$update) {
+                    DB::rollBack();
                     return response()->json(['Thất bại!'], 500);
                 }
+                
+                DB::commit();
                 return response()->json(['Thành công!'], 200);
             }else {
                 return response()->json(['Không có gì!'], 500);
