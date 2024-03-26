@@ -16,7 +16,7 @@ const userApi = {
   // lấy danh sách tất cả người dùng sau khi đăng ký thành công
   getAllUser(param) {
     return userApi.setupCSRFCookie().then(() => {
-      return axios.get('http://localhost:8000/api/info-user/get-all-info-user', { param : param , withCredentials: true });
+      return axios.get('http://localhost:8000/api/info-user/get-all-info-user', { params: param ,withCredentials: true });
     });
   },
 

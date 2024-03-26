@@ -185,6 +185,7 @@
                     { id: 2, nameSize: 'L'},
                     { id: 3, nameSize: 'XL'},
                 ],
+                isShowCartTable: true,
 
 
             }

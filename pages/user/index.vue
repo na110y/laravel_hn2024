@@ -12,13 +12,13 @@
                 <div class="cart-title"> Danh sách người dùng </div>
                 <div class="cart-body" >
                     <div class="btn-transform">
-                        <div class="search" v-show="isShowCartTable">
+                        <div class="search">
                             <b-form-group>
-                                <b-form-input id="search-product" placeholder="Tìm kiếm theo từ khóa..." v-model="search.id" @keyup.enter="onClickSearch"></b-form-input>
+                                <b-form-input id="search-product" placeholder="Tìm kiếm theo từ khóa..." v-model="search.keywords" @keyup.enter="onClickSearch"></b-form-input>
                             </b-form-group>
                         </div>
                     </div>
-                    <b-card class="mt-3" v-show="isShowCartTable">
+                    <b-card class="mt-3">
                         <b-row fluid sm="auto">
                             <b-col>
                                 <b-table striped hover :items="listUser" :fields="fields">
@@ -36,7 +36,7 @@
                                     </template>
 
                                     <template #cell(sdt)="row">
-                                        <div class="text-center">{{ row.item.sdt }} %</div>
+                                        <div class="text-center">{{ row.item.sdt }}</div>
                                     </template>
 
                                     <template #cell(gender)="row">
@@ -111,8 +111,6 @@
         data() {
             return {
                 isLoading: false,
-                isShowCartTable: true,
-                isShowCartColumn: false,
                 fields: [
                     { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
                     { key: "fullName", label: "Họ và tên", sortable: false, thClass: 'text-center' },
@@ -133,7 +131,7 @@
                 },
 
                 search:{
-                    id: "",
+                    keywords: "",
                 },
                 toastData: null,
 
@@ -165,7 +163,7 @@
                 let param = {
                     page: this.pagination.current_page,
                     rows_per_page: this.pagination.per_page,
-                    id: this.search.id,
+                    keywords: this.search.keywords,
                 };
 
                 await userApi.getAllUser(param)
