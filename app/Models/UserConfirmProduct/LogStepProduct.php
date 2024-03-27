@@ -12,6 +12,7 @@ class LogStepProduct extends Model
     protected $fillable = [
         "user_id",
         "step",
+        "status",
         "product_name",
         "staff",
         "created_at",

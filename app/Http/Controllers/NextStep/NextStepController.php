@@ -85,7 +85,7 @@ class NextStepController extends Controller
             $user_id = $data->user_id;
             $product_name = $data->product_name;
             $list_step = self::LIST_STEP;
-            
+
             if ($currentStep < count($list_step) - 1) {
                 $nextStep = self::LIST_STEP[$currentStep + 1]['step'];
             } else {
@@ -95,12 +95,14 @@ class NextStepController extends Controller
             $update_step = UserConfirmProductCart::where('id', $request->id)
             ->update([
                 'step' => $nextStep,
+                'status' => $nextStep,
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
             ]);
 
             $new_log = LogStepProduct::create([
                 'user_id' => $user_id,
                 'step' => $nextStep,
+                'status' => $nextStep,
                 'product_name' => $product_name,
                 'staff' => $admin->name,
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
