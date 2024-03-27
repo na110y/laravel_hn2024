@@ -84,9 +84,9 @@ export default {
             toastData: null,
             listProduct: [],
             fields: [
-                { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
-                { key: "product_name", label: "Tên Sản Phẩm", sortable: false, thClass: 'text-center' },
-                { key: "product_price", label: "Giá", sortable: false, thClass: 'text-center' },
+                { key: "id", label: "ID", sortable: true, thClass: 'text-center'},
+                { key: "product_name", label: "Tên Sản Phẩm", sortable: true, thClass: 'text-center' },
+                { key: "product_price", label: "Giá", sortable: true, thClass: 'text-center' },
             ],
             selectedItem: {
                 id:'',

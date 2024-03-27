@@ -117,15 +117,15 @@ export default {
                 { step: 4, stepName: 'Trả hàng && hoàn tiền' },
             ],
             fields: [
-                { key: "id", label: "ID", sortable: false, thClass: 'text-center'},
-                { key: "product_code", label: "Mã", sortable: false, thClass: 'text-center' },
-                { key: "product_name", label: "Tên", sortable: false, thClass: 'text-center' },
-                { key: "note", label: "Sale", sortable: false, thClass: 'text-center' },
-                { key: "size", label: "Size", sortable: false, thClass: 'text-center'},
-                { key: "product_price", label: "Giá", sortable: false, thClass: 'float-right'},
-                { key: "status", label: "Trạng thái", sortable: false, thClass: 'text-center'},
-                { key: "staff", label: "Người mua", sortable: false, thClass: 'text-center' },
-                { key: "action", label: "Hủy đơn", sortable: false, thClass: 'text-center' },
+                { key: "id", label: "ID", sortable: true, thClass: 'text-center'},
+                { key: "product_code", label: "Mã", sortable: true, thClass: 'text-center' },
+                { key: "product_name", label: "Tên", sortable: true, thClass: 'text-center' },
+                { key: "note", label: "Sale", sortable: true, thClass: 'text-center' },
+                { key: "size", label: "Size", sortable: true, thClass: 'text-center'},
+                { key: "product_price", label: "Giá", sortable: true, thClass: 'float-right'},
+                { key: "status", label: "Trạng thái", sortable: true, thClass: 'text-center'},
+                { key: "staff", label: "Người mua", sortable: true, thClass: 'text-center' },
+                { key: "action", label: "Hủy đơn", sortable: true, thClass: 'text-center' },
             ],
             currentStep: 0,
             export: {
@@ -183,13 +183,13 @@ export default {
                 case 0:
                     return "Chờ xử lý";
                 case 1:
-                    return "Đang giao hàng";
+                    return "Chờ giao hàng";
                 case 2:
-                    return "Thành công";
+                    return "Hoàn thành";
                 case 3:
                     return "Đã hủy";
-                case 100:
-                    return "Đã hoàn tiền";
+                case 4:
+                    return "Trả hàng && hoàn tiền";
             }
         },
         variantStatus(status) {
@@ -198,7 +198,7 @@ export default {
             else if(status == 1) return "text-primary";
             else if(status == 2) return "text-success";
             else if(status == 3) return "text-danger";
-            else if(status == 100) return "text-success";
+            else if(status == 4) return "secondary";
         },
 
         onClickExport() {
