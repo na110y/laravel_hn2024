@@ -34,11 +34,15 @@
 
                     <b-card class="step">
                         <div>
-                            <ul v-for="(step, index) in listStep" :key="index">
-                                <li class="step-item" :class="{ 'colorStep': step.step <= selectedItem.classStep }">
-                                    {{ step.step_name }}
-                                </li>
-                            </ul>
+                            <table class="table step-item">
+                                <tbody>
+                                    <tr v-for="(step, index) in listStep" :key="index" :class="{ 'colorStep': step.step <= selectedItem.classStep, 'secondary': isColorStep()}">
+                                        <th>{{ step.step_name }}</th>
+                                        <th v-if="step.step <= selectedItem.classStep">{{ isAdmin }}</th>
+                                        <th v-if="step.step <= selectedItem.classStep"><b-icon icon="check" scale="2" aria-hidden="true"></b-icon></th>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </b-card>
 
@@ -96,16 +100,18 @@ export default {
                 { step: 2, step_name: 'Hoàn thành'},
                 { step: 3, step_name: 'Đã hủy'},
                 { step: 4, step_name: 'Trả hàng && hoàn tiền'},
-            ]
+            ],
+            isAdmin: '',
+            selectedItemId: null
         }
     },
     created() {
         this.listItemProduct();
+        if (this.$auth.user) {
+            this.isAdmin = this.$auth.user.name;
+        }
     },
     methods: {
-        getStepClass(step) {
-            return { [step.classStep]: this.selectedItem.classStep === step.classStep };
-        },
         async listItemProduct() {
             this.isLoading = true;
             const param = {
@@ -125,6 +131,7 @@ export default {
         selectItem(item) {
             this.selectedItem.id = item.id;
             this.selectedItem.classStep = item.classStep;
+            this.selectedItemId = item.id;
         },
 
 
@@ -144,7 +151,13 @@ export default {
         },
         close() {
             this.$emit('cancel', false);
-        }
+        },
+
+        isColorStep() {
+            if (this.selectedItem.classStep == 4) {
+                return "secondary";
+            }
+        },
     },
 }
 </script>
@@ -155,6 +168,11 @@ export default {
     display: flex;
     align-items: center;
     gap: 0 12px;
+}
+
+.secondary {
+    background-color: $text-color--maganer !important;
+    color: $bgc-body !important;
 }
 
 ::v-deep .modal-dialog {
@@ -197,7 +215,8 @@ export default {
     }
 }
 .colorStep {
-    background: greenyellow;
+    background: rgb(190, 235, 124);
+    color: $service;
 }
 
 </style>
