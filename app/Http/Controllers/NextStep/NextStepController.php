@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\NextStep;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserConfirmProduct\LogStepProduct;
 use App\Models\UserConfirmProduct\NextStepPending;
 use App\Models\UserConfirmProduct\UserConfirmProductCart;
 use Carbon\Carbon;
@@ -72,10 +73,19 @@ class NextStepController extends Controller
     {
         try {
             DB::beginTransaction();
+            $admin = $request->session()->get('admin');
+            $data = UserConfirmProductCart::where('id', $request->id)
+                ->select([
+                    'product_pending.step',
+                    'product_pending.product_name',
+                    'product_pending.user_id',
+                ])->first();
 
-            $data = UserConfirmProductCart::where('id', $request->id)->select(['product_pending.step'])->first();
             $currentStep = $data->step;
+            $user_id = $data->user_id;
+            $product_name = $data->product_name;
             $list_step = self::LIST_STEP;
+            
             if ($currentStep < count($list_step) - 1) {
                 $nextStep = self::LIST_STEP[$currentStep + 1]['step'];
             } else {
@@ -88,9 +98,15 @@ class NextStepController extends Controller
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
             ]);
 
-            Log::info($nextStep);
+            $new_log = LogStepProduct::create([
+                'user_id' => $user_id,
+                'step' => $nextStep,
+                'product_name' => $product_name,
+                'staff' => $admin->name,
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+            ]);
 
-            if (!$update_step) {
+            if (!$update_step || !$new_log) {
                 DB::rollBack();
                 return response()->json(['error' => 'Thất bại'], 500);
             }
